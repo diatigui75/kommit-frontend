@@ -19,9 +19,28 @@ kommit-frontend/
 │   └── favicon.svg
 ├── src/
 │   ├── main.tsx           # point d'entrée, monte l'app dans le DOM
-│   └── App.tsx            # assemblage de l'app
+│   ├── App.tsx            # assemblage de l'app
+│   ├── index.css          # Tailwind et thème shadcn
+│   ├── components/
+│   │   ├── ui/            # composants shadcn (badge, button, card)
+│   │   └── pages/
+│   │       └── Home/
+│   │           ├── HomePage.tsx       # lance les vérifications via TanStack Query
+│   │           └── ConnectionCard.tsx # carte avec bouton et résultat d'une vérification
+│   ├── data/
+│   │   └── home.ts        # textes de la page d'accueil
+│   ├── lib/
+│   │   ├── api/
+│   │   │   ├── apiClient.ts # URL du backend, lecture du JSON et erreur réseau
+│   │   │   └── health.ts    # appels à /health et /db-health
+│   │   ├── queryClient.ts # client TanStack Query
+│   │   └── utils.ts       # helper cn() de shadcn
+│   └── types/
+│       └── apiContract.ts # réponses du backend
+├── .env.example           # modèle des variables d'environnement
 ├── .gitignore
 ├── CLAUDE.md              # ce fichier
+├── components.json        # config de la CLI shadcn
 ├── index.html
 ├── package.json
 ├── pnpm-lock.yaml
