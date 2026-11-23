@@ -1,0 +1,21 @@
+# Dépendances
+node_modules/
+
+# Build
+dist/
+*.tsbuildinfo
+
+# Variables d'environnement
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Système
+.DS_Store
+*:Zone.Identifier
+
+# Claude Code (réglages locaux)
+.claude/settings.local.json
