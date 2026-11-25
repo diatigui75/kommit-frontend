@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "cn"
 
+// Label de la maquette : majuscules, 12px, lettres espacées.
 function Label({ className, ...props }: React.ComponentProps<"label">) {
   return (
     <label

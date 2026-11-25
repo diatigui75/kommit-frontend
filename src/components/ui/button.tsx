@@ -7,12 +7,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // Bouton plein de la navbar
         primary:
           "rounded-[4px] border border-primary bg-linear-to-r from-primary to-blue-end px-3 py-2 text-sm leading-6 sm:px-4 sm:py-3 sm:text-base font-semibold text-primary-foreground hover:opacity-80",
+        // Bouton à contour de la navbar
         secondary:
           "rounded-[4px] border border-primary bg-white px-3 py-2 text-sm leading-6 sm:px-4 sm:py-3 sm:text-base font-semibold text-blue-text hover:opacity-70",
+        // Bouton « Se déconnecter »
         tertiary:
           "gap-2 rounded-lg bg-white py-3 pr-3 pl-4 text-base leading-6 font-semibold text-grey-blue hover:opacity-70 [&_svg:not([class*='size-'])]:size-6",
+        // Bouton des formulaires, à 30 % d'opacité quand il est désactivé
         submit:
           "h-[43px] w-full gap-2 rounded-[4px] bg-linear-[132.93deg] from-primary to-blue-end text-sm leading-5 font-bold tracking-[-0.35px] text-primary-foreground shadow-button disabled:opacity-30 [&_svg:not([class*='size-'])]:size-4",
       },

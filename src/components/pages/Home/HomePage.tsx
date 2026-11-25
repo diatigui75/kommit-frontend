@@ -11,6 +11,7 @@ type HomePageProps = {
   onSignOut?: () => void
 }
 
+// Sans firstName, accueil visiteur (RM1) ; avec, accueil connecté (RM2).
 export default function HomePage({ firstName, onSignOut }: HomePageProps) {
   if (firstName) {
     return (

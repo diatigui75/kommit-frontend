@@ -1,3 +1,4 @@
+// Espace insécable avant « ? » pour qu'il ne passe jamais seul à la ligne.
 export const homeContent = {
   visitor: {
     title: 'Prêt(e) pour ton ',

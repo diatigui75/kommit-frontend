@@ -14,6 +14,7 @@ type SigninPageProps = {
   isPending?: boolean
 }
 
+// Les états (erreur, bouton désactivé, chargement) arrivent par props, câblés à l'étape 3.
 export default function SigninPage({
   formError,
   isSubmitDisabled = false,
@@ -55,6 +56,7 @@ export default function SigninPage({
                 label={signinContent.password.label}
                 autoComplete="current-password"
               />
+              {/* Espace vide de 65px de la maquette, réservé à l'erreur du serveur (RM13). */}
               <div className="flex min-h-[65px] w-full items-center text-xs text-destructive" role="alert">
                 {formError}
               </div>

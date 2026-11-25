@@ -7,6 +7,7 @@ type PageLayoutProps = {
   children: ReactNode
 }
 
+// Structure commune aux pages : navbar, contenu, et footer poussé en bas de l'écran.
 export default function PageLayout({ navbarActions, children }: PageLayoutProps) {
   return (
     <div className="flex min-h-svh flex-col bg-background">

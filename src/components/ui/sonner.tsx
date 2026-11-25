@@ -1,6 +1,7 @@
 import { Toaster as Sonner, type ToasterProps } from "sonner"
 import { CircleCheckIcon, XIcon } from "lucide-react"
 
+// Toast d'arrivée de la maquette : vert, en haut à droite, à 100px du haut.
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner

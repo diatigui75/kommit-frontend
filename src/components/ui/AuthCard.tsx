@@ -8,6 +8,7 @@ type AuthCardProps = {
   footer: ReactNode
 }
 
+// Carte commune aux formulaires signup et signin : titre, champs, lien du bas, mention sécurisée.
 export default function AuthCard({ title, children, footer }: AuthCardProps) {
   return (
     <div className="flex w-full max-w-[400px] flex-col items-center">

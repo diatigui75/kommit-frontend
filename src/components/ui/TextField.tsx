@@ -8,6 +8,7 @@ type TextFieldProps = ComponentProps<'input'> & {
   error?: string
 }
 
+// Le message d'erreur est relié au champ par aria-describedby, pour les lecteurs d'écran.
 export default function TextField({ id, label, error, ...inputProps }: TextFieldProps) {
   const errorId = `${id}-error`
 

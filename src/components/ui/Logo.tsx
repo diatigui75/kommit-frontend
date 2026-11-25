@@ -1,6 +1,7 @@
 import logo from '@/assets/F1/logo.png'
 import { layoutContent } from '@/data/layout'
 
+// Le carré blanc derrière l'image reprend le fond placé sous l'icône dans la maquette.
 export default function Logo() {
   return (
     <div className="flex items-center gap-[3px]">

@@ -15,6 +15,7 @@ type SignupPageProps = {
   isPending?: boolean
 }
 
+// Les états (erreurs, bouton désactivé, chargement) arrivent par props, câblés à l'étape 3.
 export default function SignupPage({
   firstNameError,
   emailError,

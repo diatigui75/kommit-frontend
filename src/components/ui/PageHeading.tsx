@@ -4,6 +4,7 @@ type PageHeadingProps = {
   subtitle: string
 }
 
+// Titre des 2 états de l'accueil, avec la fin du titre en bleu.
 export default function PageHeading({ title, titleAccent, subtitle }: PageHeadingProps) {
   return (
     <div className="flex flex-col items-center gap-3 py-7 text-center">

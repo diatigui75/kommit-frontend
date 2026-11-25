@@ -7,6 +7,7 @@ type NavbarProps = {
   actions?: ReactNode
 }
 
+// Barre du haut : logo à gauche, boutons propres à chaque page à droite.
 export default function Navbar({ actions }: NavbarProps) {
   return (
     <header className="w-full bg-white/80 backdrop-blur-[6px]">
