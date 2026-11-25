@@ -39,8 +39,10 @@ kommit-frontend/
 │       └── apiContract.ts # réponses du backend
 ├── .env.example           # modèle des variables d'environnement
 ├── .gitignore
+├── .mcp.json              # serveurs MCP du projet (Figma)
 ├── CLAUDE.md              # ce fichier
 ├── components.json        # config de la CLI shadcn
+├── eslint.config.js       # config ESLint, imports en @/
 ├── index.html
 ├── package.json
 ├── pnpm-lock.yaml
