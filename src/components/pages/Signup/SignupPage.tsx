@@ -24,7 +24,7 @@ export default function SignupPage({
 }: SignupPageProps) {
   return (
     <PageLayout
-      headerActions={
+      navbarActions={
         <Link to="/signin" className={buttonVariants({ variant: 'secondary' })}>
           {layoutContent.signinLabel}
         </Link>

@@ -3,11 +3,11 @@ import { Link } from 'react-router'
 import Logo from '@/components/ui/Logo'
 import { layoutContent } from '@/data/layout'
 
-type HeaderProps = {
+type NavbarProps = {
   actions?: ReactNode
 }
 
-export default function Header({ actions }: HeaderProps) {
+export default function Navbar({ actions }: NavbarProps) {
   return (
     <header className="w-full bg-white/80 backdrop-blur-[6px]">
       <div className="flex w-full items-center justify-between gap-4 px-4 py-5 sm:px-6">

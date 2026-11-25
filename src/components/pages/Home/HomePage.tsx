@@ -15,7 +15,7 @@ export default function HomePage({ firstName, onSignOut }: HomePageProps) {
   if (firstName) {
     return (
       <PageLayout
-        headerActions={
+        navbarActions={
           <Button variant="tertiary" onClick={onSignOut}>
             <LogOutIcon aria-hidden />
             {layoutContent.signoutLabel}
@@ -35,7 +35,7 @@ export default function HomePage({ firstName, onSignOut }: HomePageProps) {
 
   return (
     <PageLayout
-      headerActions={
+      navbarActions={
         <>
           <Link to="/signin" className={buttonVariants({ variant: 'secondary' })}>
             {layoutContent.signinLabel}

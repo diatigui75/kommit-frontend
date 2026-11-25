@@ -30,10 +30,10 @@ kommit-frontend/
 │   │   ├── ui/            # shadcn (badge, button, card, input, label, sonner) et génériques
 │   │   │   ├── AuthCard.tsx    # carte des formulaires signup / signin
 │   │   │   ├── Footer.tsx      # crédit ViDev
-│   │   │   ├── Header.tsx      # logo et boutons d'action
 │   │   │   ├── Logo.tsx        # icône et nom Kommit
+│   │   │   ├── Navbar.tsx      # logo et boutons d'action
 │   │   │   ├── PageHeading.tsx # titre avec partie en bleu et sous-titre
-│   │   │   ├── PageLayout.tsx  # header, contenu et footer d'une page
+│   │   │   ├── PageLayout.tsx  # navbar, contenu et footer d'une page
 │   │   │   └── TextField.tsx   # label, champ et message d'erreur
 │   │   └── pages/
 │   │       ├── Health/
