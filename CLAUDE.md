@@ -17,6 +17,9 @@ kommit-frontend/
 │   └── TECH.md            # stack technique
 ├── public/
 │   └── favicon.svg
+├── e2e/                   # parcours Playwright de KOM-07, un fichier par thème (SM-1 à SM-20)
+│   └── support/
+│       └── auth.ts        # helpers : email unique, compte et session par l'API, requêtes bloquées
 ├── maquettes/
 │   └── F1/                # maquette brute du flux d'authentification (code, screenshots, assets, FLOW.md)
 ├── testing/
@@ -83,6 +86,7 @@ kommit-frontend/
 ├── eslint.config.js       # config ESLint, imports en @/
 ├── index.html
 ├── package.json
+├── playwright.config.ts   # config Playwright, projets deterministic et nondet
 ├── pnpm-lock.yaml
 ├── tsconfig.json          # références vers les 2 tsconfig ci-dessous
 ├── tsconfig.app.json      # config TypeScript de src/, alias @/
