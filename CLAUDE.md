@@ -17,18 +17,41 @@ kommit-frontend/
 │   └── TECH.md            # stack technique
 ├── public/
 │   └── favicon.svg
+├── maquettes/
+│   └── F1/                # maquette brute du flux d'authentification (code, screenshots, assets, FLOW.md)
 ├── src/
 │   ├── main.tsx           # point d'entrée, monte l'app dans le DOM
-│   ├── App.tsx            # assemblage de l'app
-│   ├── index.css          # Tailwind et thème shadcn
+│   ├── App.tsx            # providers, routes (/, /signup, /signin, /health) et Toaster
+│   ├── index.css          # Tailwind, thème shadcn et tokens de la maquette
+│   ├── assets/
+│   │   └── F1/
+│   │       └── logo.png   # logo Kommit
 │   ├── components/
-│   │   ├── ui/            # composants shadcn (badge, button, card)
+│   │   ├── ui/            # shadcn (badge, button, card, input, label, sonner) et génériques
+│   │   │   ├── AuthCard.tsx    # carte des formulaires signup / signin
+│   │   │   ├── Footer.tsx      # crédit ViDev
+│   │   │   ├── Header.tsx      # logo et boutons d'action
+│   │   │   ├── Logo.tsx        # icône et nom Kommit
+│   │   │   ├── PageHeading.tsx # titre avec partie en bleu et sous-titre
+│   │   │   ├── PageLayout.tsx  # header, contenu et footer d'une page
+│   │   │   └── TextField.tsx   # label, champ et message d'erreur
 │   │   └── pages/
-│   │       └── Home/
-│   │           ├── HomePage.tsx       # lance les vérifications via TanStack Query
-│   │           └── ConnectionCard.tsx # carte avec bouton et résultat d'une vérification
+│   │       ├── Health/
+│   │       │   ├── HealthPage.tsx     # lance les vérifications via TanStack Query
+│   │       │   └── ConnectionCard.tsx # carte avec bouton et résultat d'une vérification
+│   │       ├── Home/
+│   │       │   └── HomePage.tsx       # accueil visiteur ou connecté
+│   │       ├── Signin/
+│   │       │   └── SigninPage.tsx     # formulaire de connexion
+│   │       └── Signup/
+│   │           └── SignupPage.tsx     # formulaire de création de compte
 │   ├── data/
-│   │   └── home.ts        # textes de la page d'accueil
+│   │   ├── auth.ts        # textes communs à signup et signin
+│   │   ├── health.ts      # textes de la page /health
+│   │   ├── home.ts        # textes de l'accueil
+│   │   ├── layout.ts      # textes du header et du footer
+│   │   ├── signin.ts      # textes de la connexion
+│   │   └── signup.ts      # textes de la création de compte
 │   ├── lib/
 │   │   ├── api/
 │   │   │   ├── apiClient.ts # URL du backend, lecture du JSON et erreur réseau
