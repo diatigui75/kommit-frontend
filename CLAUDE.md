@@ -52,6 +52,14 @@ kommit-frontend/
 │   │   ├── layout.ts      # textes du header et du footer
 │   │   ├── signin.ts      # textes de la connexion
 │   │   └── signup.ts      # textes de la création de compte
+│   ├── logic/
+│   │   └── auth/          # logique pure de KOM-07, chaque unité avec son .test.ts
+│   │       ├── arrivalToast/ # message du toast selon l'origine (RM3, RM4, RM24, RM25)
+│   │       ├── email/        # normalisation de l'email (RM21)
+│   │       ├── error/        # ApiError ou échec réseau → message et emplacement (RM9, RM13, RM18)
+│   │       ├── session/      # état visiteur et titre de l'accueil (RM1, RM2)
+│   │       ├── submitButton/ # bouton de soumission activé ou non (RM17, RM19, RM32, RM33)
+│   │       └── validation/   # critères du signup et visibilité des erreurs (RM10, RM11, RM20, RM30)
 │   ├── lib/
 │   │   ├── api/
 │   │   │   ├── apiClient.ts # URL du backend, lecture du JSON et erreur réseau
