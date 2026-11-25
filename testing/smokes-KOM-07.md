@@ -10,6 +10,7 @@ Conventions communes à tous les scénarios :
 - **Libellés** : repris de `src/data/` (maquette intégrée). Les libellés des champs du signup portent un astérisque (« Prénom* », « Email* », « Mot de passe* ») : « le champ Prénom » désigne ce champ. Dans le header, « Se connecter » et « Créer un compte » sont des **liens** stylés en bouton, pas des boutons.
 - **Compte de test** : « le compte Marc » = un compte existant de prénom « Marc », email « marc@test.dev », mot de passe « motdepasse123 ». Il est créé avant le scénario qui le demande.
 - **Email neuf** : un email jamais utilisé, par exemple « marc+<horodatage>@test.dev », pour que le signup ne tombe pas sur `EMAIL_ALREADY_EXISTS`.
+- **Messages d'erreur** (cadrage de l'inventaire) : le front affiche toujours le `message` renvoyé par le backend, `INTERNAL_ERROR` compris. Le texte du front « Le serveur ne répond pas. Réessaie dans un instant. » ne sert que pour le serveur injoignable et l'erreur inconnue.
 - **Libellé absent** : si un libellé désigné ici n'existe pas à l'écran, le smoke échoue à l'étape qui le cite. C'est soit un écart avec la maquette, soit un livrable manquant.
 
 ### 1. Page d'accueil
@@ -117,7 +118,7 @@ Attendu : l'URL devient /signin. Le titre « Se connecter » s'affiche, avec les
 | RM30 | 🟠 | Erreurs de format affichées à la 1re soumission, puis mises à jour pendant la saisie | SM-6 |
 | RM17 | 🟠 | Pendant l'appel, bouton désactivé avec spinner et libellé aria (signin puis signup) | SM-7, SM-8 |
 | RM16 | 🔴 | Un double-clic n'envoie qu'une seule requête | SM-9 |
-| RM9, RM13 | 🟢 | Mapping `EMAIL_ALREADY_EXISTS` / `INVALID_CREDENTIALS` → message et emplacement | aucun smoke, couvert en unitaire |
+| RM9, RM13 | 🟢 | `EMAIL_ALREADY_EXISTS` / `INVALID_CREDENTIALS` → `message` du serveur, sous le champ Email ou en message global | aucun smoke, couvert en unitaire |
 | RM8, RM12 | 🔴 | Signup ou signin réussi : retour à l'accueil, connecté | SM-10, SM-11 |
 
 ---
@@ -356,8 +357,6 @@ Précondition : dev server lancé, compte Marc existant, session ouverte, page /
 
 Attendu : après l'étape 1, sans modale ni toast, l'accueil affiche « Prêt(e) pour ton daily standup ? » et le header montre les liens « Se connecter » et « Créer un compte ». Après l'étape 2, l'accueil est toujours en état visiteur.
 
-Libellé repris du code et de la maquette (« Se déconnecter »). Le ticket écrit « Déconnexion » : voir points ouverts.
-
 - [ ] Vérifié
 
 ---
@@ -381,7 +380,7 @@ Attendu : l'accueil affiche « Prêt(e) pour ton daily standup ? » avec les lie
 | RM | Inventaire | Ce qu'on vérifie | Scénario |
 |---|---|---|---|
 | `TOO_MANY_ATTEMPTS` (sans n°) | 🟢 | Message du serveur affiché tel quel, en message global du formulaire | aucun smoke, couvert en unitaire |
-| RM18, RM19 | 🟠 | Serveur injoignable : message distinct des erreurs métier, bouton de nouveau utilisable | SM-19 |
+| RM18, RM19 | 🟠 | Serveur injoignable : texte de panne du front en message global, bouton de nouveau utilisable. Le cas `INTERNAL_ERROR` (`message` du serveur) est couvert en unitaire | SM-19 |
 | RM21 | 🟢 | Email normalisé (trim + minuscules) avant l'envoi | aucun smoke, couvert en unitaire |
 | RM23 | 🔴 | Un prénom contenant du HTML s'affiche en texte brut dans le titre et le toast | SM-20 |
 
@@ -391,6 +390,7 @@ Attendu : l'accueil affiche « Prêt(e) pour ton daily standup ? » avec les lie
 
 > ✅ **Ce qu'on vérifie :**
 > - Quand le serveur ne répond pas, le formulaire affiche un message de panne distinct des erreurs métier (pas le message d'identifiants invalides), et le bouton redevient utilisable pour réessayer.
+> - Serveur injoignable est l'un des 2 seuls cas où le front affiche son propre texte (avec l'erreur inconnue). Toute réponse du backend, `INTERNAL_ERROR` compris, affiche son `message` tel quel : ce cas est couvert en unitaire, pas joué ici.
 > - Smoke parce que l'échec réseau réel de `fetch` (backend coupé) n'a pas de code dans le contrat : le test unitaire en mocke la forme, seul le vrai navigateur la confirme.
 
 Précondition : front lancé (`pnpm dev`), **backend arrêté**, aucune session, page /signin ouverte.
@@ -426,3 +426,12 @@ Précondition : dev server lancé, aucune session, page /signup ouverte.
 Attendu : sur /, le titre affiche littéralement « Qu'as-tu fait de beau aujourd'hui, <b>Marc</b> ? » et le toast affiche littéralement « Bienvenue <b>Marc</b>, ton compte est créé. ». Les caractères `<b>` et `</b>` sont visibles et « Marc » n'est pas en gras.
 
 - [ ] Vérifié
+
+### 7. Règles tranchées par l'utilisateur (hors ticket, hors contrat)
+
+| RM | Inventaire | Ce qu'on vérifie | Scénario |
+|---|---|---|---|
+| Arbitrage 1 (sans n°) | 🟢 | Email ou mot de passe fait uniquement d'espaces : bouton de soumission grisé, au signin comme au signup | aucun smoke, couvert en unitaire |
+| Arbitrage 2 (sans n°) | 🟢 | Au signup, un email sans extension de domaine (`marc@test`) est invalide | aucun smoke, couvert en unitaire |
+| Arbitrage 3 (sans n°) | 🟢 | `VALIDATION_ERROR` → `message` du serveur en message global, en haut du formulaire | aucun smoke, couvert en unitaire |
+| Arbitrage 4 (sans n°) | 🟢 | Erreur inconnue → traitée comme une panne, texte du front « Le serveur ne répond pas. Réessaie dans un instant. » en haut du formulaire | aucun smoke, couvert en unitaire |
