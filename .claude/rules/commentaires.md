@@ -7,6 +7,15 @@ Un commentaire ne se justifie que s'il apporte une information **que le code ne 
 - Le **pourquoi** non évident : une décision, un piège, une contrainte, un lien vers une règle métier du ticket. Ex. « le bouton reste désactivé tant que la requête est en vol (RM6) ».
 - Un choix contre-intuitif qu'un lecteur voudrait « corriger » sans le contexte.
 
+## Exception : 1 ligne au-dessus de chaque composant
+
+Chaque composant qu'on écrit ou qu'on restyle dans `components/ui/` et `components/pages/` porte **1 ligne de commentaire juste au-dessus de sa déclaration**. Elle dit son rôle, ou ce qui ne se voit pas dans son nom : d'où vient son style (la maquette), quelle RM il porte, comment ses états arrivent.
+
+- ✓ `// Pied de page des 4 pages. Le lien ViDev s'ouvre dans un nouvel onglet (RM15).`
+- ✓ `// Sans firstName, accueil visiteur (RM1) ; avec, accueil connecté (RM2).`
+
+Un composant shadcn laissé tel quel (ni restylé ni modifié) n'en prend pas.
+
 ## Ce qui ne mérite pas de commentaire
 
 - **Paraphraser** un nom de variable, de fonction ou de prop. Si `handleDismiss` ou `initialFocus` sont clairs, ne pas les réexpliquer.

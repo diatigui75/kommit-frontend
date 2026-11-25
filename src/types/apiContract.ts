@@ -14,6 +14,8 @@ export type AuthErrorCode =
    *  L'inscription révèle qu'un email est pris, la connexion ne révèle jamais rien :
    *  postures volontairement opposées, tranché le 2026-07-12. */
   | "INVALID_CREDENTIALS"
+  /** Signin ou signup, trop d'essais ratés depuis la même IP → 429. Le front affiche le message tel quel. */
+  | "TOO_MANY_ATTEMPTS"
 
 /** Erreurs du standup (F2). */
 export type StandupErrorCode =

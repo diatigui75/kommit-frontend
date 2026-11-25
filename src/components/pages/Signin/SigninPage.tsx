@@ -1,0 +1,96 @@
+import type { FormEvent } from 'react'
+import { Link } from 'react-router'
+import { LoaderCircleIcon } from 'lucide-react'
+import AuthCard from '@/components/ui/AuthCard'
+import { Button, buttonVariants } from '@/components/ui/button'
+import PageLayout from '@/components/ui/PageLayout'
+import TextField from '@/components/ui/TextField'
+import { layoutContent } from '@/data/layout'
+import { signinContent } from '@/data/signin'
+
+type SigninField = 'email' | 'password'
+
+type SigninPageProps = {
+  values: Record<SigninField, string>
+  onFieldChange: (field: SigninField, value: string) => void
+  onSubmit: () => void
+  formError?: string
+  isSubmitDisabled?: boolean
+  isPending?: boolean
+}
+
+// Formulaire de signin : valeurs, erreur et chargement arrivent par props depuis SigninRoute.
+export default function SigninPage({
+  values,
+  onFieldChange,
+  onSubmit,
+  formError,
+  isSubmitDisabled = false,
+  isPending = false,
+}: SigninPageProps) {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    onSubmit()
+  }
+
+  return (
+    <PageLayout
+      navbarActions={
+        <Link to="/signup" className={buttonVariants({ variant: 'primary' })}>
+          {layoutContent.signupLabel}
+        </Link>
+      }
+    >
+      <div className="w-full pt-10 pb-8 md:pt-[218px]">
+        <div className="flex justify-center">
+          <AuthCard
+            title={signinContent.title}
+            footer={
+              <>
+                {signinContent.footerText}
+                <Link to="/signup" className="text-primary">
+                  {signinContent.footerLink}
+                </Link>
+                {signinContent.footerEnd}
+              </>
+            }
+          >
+            <form noValidate onSubmit={handleSubmit} className="flex w-full flex-col items-center gap-5">
+              <TextField
+                id="signin-email"
+                value={values.email}
+                onChange={(event) => onFieldChange('email', event.target.value)}
+                type="email"
+                label={signinContent.email.label}
+                placeholder={signinContent.email.placeholder}
+                autoComplete="email"
+              />
+              <TextField
+                id="signin-password"
+                value={values.password}
+                onChange={(event) => onFieldChange('password', event.target.value)}
+                type="password"
+                label={signinContent.password.label}
+                autoComplete="current-password"
+              />
+              {/* Espace vide de 65px de la maquette, réservé à l'erreur du serveur (RM13). */}
+              <div className="flex min-h-[65px] w-full items-center text-xs text-destructive" role="alert">
+                {formError}
+              </div>
+              <Button type="submit" variant="submit" disabled={isSubmitDisabled || isPending}>
+                {isPending ? (
+                  <>
+                    <LoaderCircleIcon className="animate-spin" aria-hidden />
+                    <span className="sr-only">{signinContent.submitPending}</span>
+                  </>
+                ) : (
+                  signinContent.submit
+                )}
+              </Button>
+            </form>
+          </AuthCard>
+        </div>
+      </div>
+    </PageLayout>
+  )
+}

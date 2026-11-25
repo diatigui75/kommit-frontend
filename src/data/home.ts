@@ -1,19 +1,19 @@
+// Espace insécable avant « ? » pour qu'il ne passe jamais seul à la ligne.
 export const homeContent = {
-  title: 'Kommit',
-  subtitle: 'Vérification des connexions au backend.',
-  server: {
-    title: 'Serveur',
-    description: "Interroge la route /health de l'API.",
-    button: 'Vérifier la connexion au serveur',
-    pendingButton: 'Vérification...',
-    success: 'Serveur joignable.',
+  visitor: {
+    title: 'Prêt(e) pour ton ',
+    titleAccent: 'daily standup\u00a0?',
+    subtitle: 'Track tes résultats pour que les jours ne se ressemblent pas.',
   },
-  database: {
-    title: 'Base de données',
-    description: "Interroge la route /db-health de l'API.",
-    button: 'Vérifier la connexion à la base',
-    pendingButton: 'Vérification...',
-    success: 'Base joignable.',
-    unreachable: "La base n'a pas répondu.",
+  connected: {
+    title: "Qu'as-tu fait de beau aujourd'hui, ",
+    titleAccentSuffix: '\u00a0?',
+    subtitle: 'Renseigne ton daily du jour ci-dessous.',
+  },
+  arrivalToast: {
+    signupStart: 'Bienvenue ',
+    signupEnd: ', ton compte est créé.',
+    signinStart: 'Content de te revoir ',
+    signinEnd: '.',
   },
 } as const
