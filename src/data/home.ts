@@ -10,4 +10,10 @@ export const homeContent = {
     titleAccentSuffix: '\u00a0?',
     subtitle: 'Renseigne ton daily du jour ci-dessous.',
   },
+  arrivalToast: {
+    signupStart: 'Bienvenue ',
+    signupEnd: ', ton compte est créé.',
+    signinStart: 'Content de te revoir ',
+    signinEnd: '.',
+  },
 } as const

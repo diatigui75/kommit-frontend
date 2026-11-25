@@ -1,3 +1,4 @@
+import { homeContent } from '@/data/home'
 import type { Session } from '@/types/apiContract'
 
 export type Greeting = {
@@ -5,10 +6,13 @@ export type Greeting = {
   titleAccent: string
 }
 
-export function isVisitor(_session: Session): boolean {
-  return false
+export function isVisitor(session: Session): boolean {
+  return session === null
 }
 
-export function composeGreeting(_name: string): Greeting {
-  return { title: '', titleAccent: '' }
+export function composeGreeting(name: string): Greeting {
+  return {
+    title: homeContent.connected.title,
+    titleAccent: `${name}${homeContent.connected.titleAccentSuffix}`,
+  }
 }

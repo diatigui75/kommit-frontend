@@ -5,15 +5,21 @@ import PageHeading from '@/components/ui/PageHeading'
 import PageLayout from '@/components/ui/PageLayout'
 import { homeContent } from '@/data/home'
 import { layoutContent } from '@/data/layout'
+import { composeGreeting } from '@/logic/auth/session/session'
 
 type HomePageProps = {
   firstName?: string
   onSignOut?: () => void
+  isSessionPending?: boolean
 }
 
-// Sans firstName, accueil visiteur (RM1) ; avec, accueil connecté (RM2).
-export default function HomePage({ firstName, onSignOut }: HomePageProps) {
+// Sans firstName, accueil visiteur (RM1) ; avec, accueil connecté (RM2). Rien tant que la session charge.
+export default function HomePage({ firstName, onSignOut, isSessionPending = false }: HomePageProps) {
+  if (isSessionPending) return <PageLayout>{null}</PageLayout>
+
   if (firstName) {
+    const greeting = composeGreeting(firstName)
+
     return (
       <PageLayout
         navbarActions={
@@ -25,8 +31,8 @@ export default function HomePage({ firstName, onSignOut }: HomePageProps) {
       >
         <div className="py-8">
           <PageHeading
-            title={homeContent.connected.title}
-            titleAccent={`${firstName}${homeContent.connected.titleAccentSuffix}`}
+            title={greeting.title}
+            titleAccent={greeting.titleAccent}
             subtitle={homeContent.connected.subtitle}
           />
         </div>

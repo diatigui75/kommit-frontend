@@ -19,6 +19,9 @@ kommit-frontend/
 │   └── favicon.svg
 ├── maquettes/
 │   └── F1/                # maquette brute du flux d'authentification (code, screenshots, assets, FLOW.md)
+├── testing/
+│   ├── inventaire-KOM-07.md # classement des RM de KOM-07 par type de test
+│   └── smokes-KOM-07.md     # scénarios de smoke de KOM-07
 ├── src/
 │   ├── main.tsx           # point d'entrée, monte l'app dans le DOM
 │   ├── App.tsx            # providers, routes (/, /signup, /signin, /health) et Toaster
@@ -40,11 +43,14 @@ kommit-frontend/
 │   │       │   ├── HealthPage.tsx     # lance les vérifications via TanStack Query
 │   │       │   └── ConnectionCard.tsx # carte avec bouton et résultat d'une vérification
 │   │       ├── Home/
-│   │       │   └── HomePage.tsx       # accueil visiteur ou connecté
+│   │       │   ├── HomePage.tsx       # accueil visiteur ou connecté
+│   │       │   └── HomeRoute.tsx      # session, toast d'arrivée et déconnexion
 │   │       ├── Signin/
-│   │       │   └── SigninPage.tsx     # formulaire de connexion
+│   │       │   ├── SigninPage.tsx     # formulaire de connexion
+│   │       │   └── SigninRoute.tsx    # saisie, appel signin et erreurs
 │   │       └── Signup/
-│   │           └── SignupPage.tsx     # formulaire de création de compte
+│   │           ├── SignupPage.tsx     # formulaire de création de compte
+│   │           └── SignupRoute.tsx    # saisie, validation, appel signup et erreurs
 │   ├── data/
 │   │   ├── auth.ts        # textes communs à signup et signin
 │   │   ├── health.ts      # textes de la page /health
@@ -62,7 +68,8 @@ kommit-frontend/
 │   │       └── validation/   # critères du signup et visibilité des erreurs (RM10, RM11, RM20, RM30)
 │   ├── lib/
 │   │   ├── api/
-│   │   │   ├── apiClient.ts # URL du backend, lecture du JSON et erreur réseau
+│   │   │   ├── apiClient.ts # URL du backend, cookie de session, JSON et erreurs
+│   │   │   ├── auth.ts      # appels Better Auth (session, signup, signin, signout)
 │   │   │   └── health.ts    # appels à /health et /db-health
 │   │   ├── queryClient.ts # client TanStack Query
 │   │   └── utils.ts       # helper cn() de shadcn

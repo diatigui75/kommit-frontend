@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { FormEvent } from 'react'
 import { Link } from 'react-router'
 import { LoaderCircleIcon } from 'lucide-react'
 import AuthCard from '@/components/ui/AuthCard'
@@ -8,18 +8,31 @@ import TextField from '@/components/ui/TextField'
 import { layoutContent } from '@/data/layout'
 import { signinContent } from '@/data/signin'
 
+type SigninField = 'email' | 'password'
+
 type SigninPageProps = {
-  formError?: ReactNode
+  values: Record<SigninField, string>
+  onFieldChange: (field: SigninField, value: string) => void
+  onSubmit: () => void
+  formError?: string
   isSubmitDisabled?: boolean
   isPending?: boolean
 }
 
-// Les états (erreur, bouton désactivé, chargement) arrivent par props, câblés à l'étape 3.
+// Formulaire de signin : valeurs, erreur et chargement arrivent par props depuis SigninRoute.
 export default function SigninPage({
+  values,
+  onFieldChange,
+  onSubmit,
   formError,
   isSubmitDisabled = false,
   isPending = false,
 }: SigninPageProps) {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    onSubmit()
+  }
+
   return (
     <PageLayout
       navbarActions={
@@ -42,9 +55,11 @@ export default function SigninPage({
               </>
             }
           >
-            <form noValidate className="flex w-full flex-col items-center gap-5">
+            <form noValidate onSubmit={handleSubmit} className="flex w-full flex-col items-center gap-5">
               <TextField
                 id="signin-email"
+                value={values.email}
+                onChange={(event) => onFieldChange('email', event.target.value)}
                 type="email"
                 label={signinContent.email.label}
                 placeholder={signinContent.email.placeholder}
@@ -52,6 +67,8 @@ export default function SigninPage({
               />
               <TextField
                 id="signin-password"
+                value={values.password}
+                onChange={(event) => onFieldChange('password', event.target.value)}
                 type="password"
                 label={signinContent.password.label}
                 autoComplete="current-password"
