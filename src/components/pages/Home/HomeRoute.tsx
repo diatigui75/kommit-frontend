@@ -5,11 +5,12 @@ import { toast } from 'sonner'
 import HomePage from '@/components/pages/Home/HomePage'
 import { fetchSession, sessionQueryKey, signOut } from '@/lib/api/auth'
 import { arrivalToastFor, type ArrivalOrigin } from '@/logic/auth/arrivalToast/arrivalToast'
+import { authErrorDisplayFor } from '@/logic/auth/error/error'
 import { isVisitor } from '@/logic/auth/session/session'
 
 type ArrivalState = { arrivalOrigin?: ArrivalOrigin } | null
 
-// Câble l'accueil : session (RM1, RM2), toast d'arrivée (RM3, RM4, RM24, RM25), déconnexion (RM5).
+// Câble l'accueil : session (RM1, RM2), toast d'arrivée (RM3, RM4, RM24, RM25), déconnexion (RM5, échec en toast d'erreur).
 export default function HomeRoute() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -34,7 +35,10 @@ export default function HomeRoute() {
   const signOutMutation = useMutation({
     mutationFn: signOut,
     onSuccess: () => queryClient.setQueryData(sessionQueryKey, null),
-    onError: () => queryClient.invalidateQueries({ queryKey: sessionQueryKey }),
+    onError: (error) => {
+      toast.error(authErrorDisplayFor(error).message)
+      void queryClient.invalidateQueries({ queryKey: sessionQueryKey })
+    },
   })
 
   return (
@@ -42,6 +46,7 @@ export default function HomeRoute() {
       firstName={isVisitor(session) ? undefined : session?.user.name}
       onSignOut={() => signOutMutation.mutate()}
       isSessionPending={sessionQuery.isPending}
+      isSignOutPending={signOutMutation.isPending}
     />
   )
 }

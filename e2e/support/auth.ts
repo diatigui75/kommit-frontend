@@ -9,6 +9,14 @@ export const SIGNIN_URL = `${API_URL}/api/auth/sign-in/email`
 
 export type Account = { name: string; email: string; password: string }
 
+// Backend sur une base Neon distante : un aller-retour peut prendre plusieurs secondes (réveil de la base, workers en parallèle).
+// Ce délai vaut seulement pour un observable qui attend une réponse du backend ; le reste garde les 5 s par défaut.
+export const BACKEND_TIMEOUT = 15_000
+export const expectAfterBackend = expect.configure({ timeout: BACKEND_TIMEOUT })
+
+// Un test qui enchaîne plusieurs allers-retours (création du compte, session, signin, relecture) dépasse vite les 30 s par défaut.
+export const BACKEND_TEST_TIMEOUT = 60_000
+
 // Email unique par appel : un 2e run ne bute pas sur EMAIL_ALREADY_EXISTS.
 export const uniqueEmail = () => `marc+${Date.now()}-${Math.random().toString(36).slice(2, 8)}@test.dev`
 

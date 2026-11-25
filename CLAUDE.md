@@ -38,7 +38,6 @@ kommit-frontend/
 │   │   │   ├── Footer.tsx      # crédit ViDev
 │   │   │   ├── Logo.tsx        # icône et nom Kommit
 │   │   │   ├── Navbar.tsx      # logo et boutons d'action
-│   │   │   ├── PageHeading.tsx # titre avec partie en bleu et sous-titre
 │   │   │   ├── PageLayout.tsx  # navbar, contenu et footer d'une page
 │   │   │   └── TextField.tsx   # label, champ et message d'erreur
 │   │   └── pages/
@@ -47,7 +46,8 @@ kommit-frontend/
 │   │       │   └── ConnectionCard.tsx # carte avec bouton et résultat d'une vérification
 │   │       ├── Home/
 │   │       │   ├── HomePage.tsx       # accueil visiteur ou connecté
-│   │       │   └── HomeRoute.tsx      # session, toast d'arrivée et déconnexion
+│   │       │   ├── HomeRoute.tsx      # session, toast d'arrivée et déconnexion
+│   │       │   └── PageHeading.tsx    # titre avec partie en bleu et sous-titre
 │   │       ├── Signin/
 │   │       │   ├── SigninPage.tsx     # formulaire de connexion
 │   │       │   └── SigninRoute.tsx    # saisie, appel signin et erreurs
@@ -67,6 +67,7 @@ kommit-frontend/
 │   │       ├── email/        # normalisation de l'email (RM21)
 │   │       ├── error/        # ApiError ou échec réseau → message et emplacement (RM9, RM13, RM18)
 │   │       ├── session/      # état visiteur et titre de l'accueil (RM1, RM2)
+│   │       ├── signupBody/   # corps envoyé au signup : prénom trimé, email normalisé
 │   │       ├── submitButton/ # bouton de soumission activé ou non (RM17, RM19, RM32, RM33)
 │   │       └── validation/   # critères du signup et visibilité des erreurs (RM10, RM11, RM20, RM30)
 │   ├── lib/

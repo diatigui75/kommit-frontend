@@ -1,5 +1,16 @@
 import { expect, test } from '@playwright/test'
-import { SIGNUP_URL, connectedHeading, countPosts, holdPost, toasts, uniqueEmail } from './support/auth.ts'
+import {
+  BACKEND_TEST_TIMEOUT,
+  SIGNUP_URL,
+  connectedHeading,
+  countPosts,
+  expectAfterBackend,
+  holdPost,
+  toasts,
+  uniqueEmail,
+} from './support/auth.ts'
+
+test.describe.configure({ timeout: BACKEND_TEST_TIMEOUT })
 
 const EMAIL_ERROR = 'Renseigne un email valide.'
 const PASSWORD_ERROR = 'Ton mot de passe doit contenir au moins 8 caractères.'
@@ -59,7 +70,7 @@ test('SM-8 : signup en cours, bouton désactivé avec spinner (RM17, signup)', a
 
   releaseSignup()
 
-  await expect(page).toHaveURL('/')
+  await expectAfterBackend(page).toHaveURL('/')
   await expect(connectedHeading(page, 'Marc')).toBeVisible()
 })
 
@@ -70,7 +81,7 @@ test('SM-10 : signup réussi, retour à l\'accueil connecté (RM8)', async ({ pa
 
   await page.getByRole('button', { name: 'Créer un compte' }).click()
 
-  await expect(page).toHaveURL('/')
+  await expectAfterBackend(page).toHaveURL('/')
   await expect(connectedHeading(page, 'Marc')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Se déconnecter' })).toBeVisible()
 })
@@ -82,7 +93,7 @@ test('SM-20 : prénom contenant du HTML, rendu en texte brut (RM23)', async ({ p
 
   await page.getByRole('button', { name: 'Créer un compte' }).click()
 
-  await expect(page).toHaveURL('/')
+  await expectAfterBackend(page).toHaveURL('/')
   await expect(connectedHeading(page, '<b>Marc</b>')).toBeVisible()
   await expect(toasts(page).getByText('Bienvenue <b>Marc</b>, ton compte est créé.', { exact: true })).toBeVisible()
 })

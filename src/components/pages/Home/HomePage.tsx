@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 import { LogOutIcon } from 'lucide-react'
 import { Button, buttonVariants } from '@/components/ui/button'
-import PageHeading from '@/components/ui/PageHeading'
+import PageHeading from '@/components/pages/Home/PageHeading'
 import PageLayout from '@/components/ui/PageLayout'
 import { homeContent } from '@/data/home'
 import { layoutContent } from '@/data/layout'
@@ -11,10 +11,16 @@ type HomePageProps = {
   firstName?: string
   onSignOut?: () => void
   isSessionPending?: boolean
+  isSignOutPending?: boolean
 }
 
 // Sans firstName, accueil visiteur (RM1) ; avec, accueil connecté (RM2). Rien tant que la session charge.
-export default function HomePage({ firstName, onSignOut, isSessionPending = false }: HomePageProps) {
+export default function HomePage({
+  firstName,
+  onSignOut,
+  isSessionPending = false,
+  isSignOutPending = false,
+}: HomePageProps) {
   if (isSessionPending) return <PageLayout>{null}</PageLayout>
 
   if (firstName) {
@@ -23,7 +29,7 @@ export default function HomePage({ firstName, onSignOut, isSessionPending = fals
     return (
       <PageLayout
         navbarActions={
-          <Button variant="tertiary" onClick={onSignOut}>
+          <Button variant="tertiary" onClick={onSignOut} disabled={isSignOutPending}>
             <LogOutIcon aria-hidden />
             {layoutContent.signoutLabel}
           </Button>

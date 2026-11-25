@@ -1,13 +1,17 @@
 import { expect, test, type Page } from '@playwright/test'
 import {
+  BACKEND_TEST_TIMEOUT,
   connectedHeading,
   createAccount,
+  expectAfterBackend,
   newMarcAccount,
   openSession,
   toasts,
   uniqueEmail,
   type Account,
 } from './support/auth.ts'
+
+test.describe.configure({ timeout: BACKEND_TEST_TIMEOUT })
 
 const SIGNIN_TOAST = 'Content de te revoir Marc.'
 
@@ -23,7 +27,7 @@ async function signInThroughForm(page: Page, account: Account) {
   await page.getByLabel('Email', { exact: true }).fill(account.email)
   await page.getByLabel('Mot de passe', { exact: true }).fill(account.password)
   await page.getByRole('button', { name: 'Me connecter' }).click()
-  await expect(toasts(page).getByText(SIGNIN_TOAST, { exact: true })).toBeVisible()
+  await expectAfterBackend(toasts(page).getByText(SIGNIN_TOAST, { exact: true })).toBeVisible()
 }
 
 // Le toast est vu puis fermé par sa croix, comme dans la précondition de SM-14 et SM-15.
@@ -51,7 +55,7 @@ test('SM-12 : toast d\'arrivée après un signup (RM3)', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Créer un compte' }).click()
 
-  await expect(page).toHaveURL('/')
+  await expectAfterBackend(page).toHaveURL('/')
   await expect(toasts(page).getByText(toastText, { exact: true })).toBeVisible()
   await expect(toasts(page).getByRole('button', { name: 'Close toast' })).toBeVisible()
   await expect(toasts(page)).toHaveCount(1)
@@ -65,7 +69,7 @@ test('SM-13 : toast d\'arrivée après un signin (RM4)', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Me connecter' }).click()
 
-  await expect(page).toHaveURL('/')
+  await expectAfterBackend(page).toHaveURL('/')
   await expect(toasts(page).getByText(SIGNIN_TOAST, { exact: true })).toBeVisible()
   await expect(toasts(page).getByRole('button', { name: 'Close toast' })).toBeVisible()
   await expect(toasts(page)).toHaveCount(1)
@@ -79,7 +83,7 @@ test('SM-14 : pas de toast après un rechargement (RM24)', async ({ page }) => {
 
   await page.reload()
 
-  await expect(connectedHeading(page, 'Marc')).toBeVisible()
+  await expectAfterBackend(connectedHeading(page, 'Marc')).toBeVisible()
   await expect(toasts(page)).toHaveCount(0)
 })
 
@@ -102,6 +106,6 @@ test('SM-16 : session persistée, ouverture directe de l\'accueil sans toast (RM
   const newTab = await context.newPage()
   await newTab.goto('/')
 
-  await expect(connectedHeading(newTab, 'Marc')).toBeVisible()
+  await expectAfterBackend(connectedHeading(newTab, 'Marc')).toBeVisible()
   await expect(toasts(newTab)).toHaveCount(0)
 })

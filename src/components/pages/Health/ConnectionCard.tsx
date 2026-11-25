@@ -20,6 +20,7 @@ type ConnectionCardProps = {
   onCheck: () => void
 }
 
+// Carte d'une vérification : bouton, état en cours et résultat ok ou en échec.
 export default function ConnectionCard({
   title,
   description,

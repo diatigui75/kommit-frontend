@@ -1,5 +1,17 @@
 import { expect, test, type Route } from '@playwright/test'
-import { SIGNIN_URL, connectedHeading, countPosts, createAccount, holdPost, newMarcAccount, type Account } from './support/auth.ts'
+import {
+  BACKEND_TEST_TIMEOUT,
+  SIGNIN_URL,
+  connectedHeading,
+  countPosts,
+  createAccount,
+  expectAfterBackend,
+  holdPost,
+  newMarcAccount,
+  type Account,
+} from './support/auth.ts'
+
+test.describe.configure({ timeout: BACKEND_TEST_TIMEOUT })
 
 const OUTAGE_MESSAGE = 'Le serveur ne répond pas. Réessaie dans un instant.'
 
@@ -28,7 +40,7 @@ test('SM-7 : signin en cours, bouton désactivé avec spinner (RM17, signin)', a
 
   releaseSignin()
 
-  await expect(page).toHaveURL('/')
+  await expectAfterBackend(page).toHaveURL('/')
   await expect(connectedHeading(page, 'Marc')).toBeVisible()
 })
 
@@ -39,7 +51,7 @@ test('SM-9 : double-clic sur « Me connecter », une seule requête (RM16)', asy
 
   await page.getByRole('button', { name: 'Me connecter' }).dblclick()
 
-  await expect(page).toHaveURL('/')
+  await expectAfterBackend(page).toHaveURL('/')
   await expect(connectedHeading(page, 'Marc')).toBeVisible()
   expect(signinPosts()).toBe(1)
 })
@@ -50,7 +62,7 @@ test('SM-11 : signin réussi, retour à l\'accueil connecté (RM12)', async ({ p
 
   await page.getByRole('button', { name: 'Me connecter' }).click()
 
-  await expect(page).toHaveURL('/')
+  await expectAfterBackend(page).toHaveURL('/')
   await expect(connectedHeading(page, 'Marc')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Se déconnecter' })).toBeVisible()
 })

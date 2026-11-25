@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test'
 import {
+  BACKEND_TEST_TIMEOUT,
   connectedHeading,
   createAccount,
+  expectAfterBackend,
   headerLink,
   newMarcAccount,
   openSession,
@@ -9,16 +11,18 @@ import {
   visitorHeading,
 } from './support/auth.ts'
 
+test.describe.configure({ timeout: BACKEND_TEST_TIMEOUT })
+
 test('SM-17 : déconnexion silencieuse (RM5)', async ({ page, request }) => {
   const marc = newMarcAccount()
   await createAccount(request, marc)
   await openSession(page, marc)
   await page.goto('/')
-  await expect(connectedHeading(page, 'Marc')).toBeVisible()
+  await expectAfterBackend(connectedHeading(page, 'Marc')).toBeVisible()
 
   await page.getByRole('button', { name: 'Se déconnecter' }).click()
 
-  await expect(visitorHeading(page)).toBeVisible()
+  await expectAfterBackend(visitorHeading(page)).toBeVisible()
   await expect(headerLink(page, 'Se connecter')).toBeVisible()
   await expect(headerLink(page, 'Créer un compte')).toBeVisible()
   await expect(page.getByRole('dialog')).toHaveCount(0)
@@ -27,7 +31,7 @@ test('SM-17 : déconnexion silencieuse (RM5)', async ({ page, request }) => {
 
   await page.reload()
 
-  await expect(visitorHeading(page)).toBeVisible()
+  await expectAfterBackend(visitorHeading(page)).toBeVisible()
   await expect(headerLink(page, 'Se connecter')).toBeVisible()
   await expect(headerLink(page, 'Créer un compte')).toBeVisible()
 })

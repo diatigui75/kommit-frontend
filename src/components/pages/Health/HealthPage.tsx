@@ -4,6 +4,7 @@ import ConnectionCard, { type ConnectionStatus } from '@/components/pages/Health
 import { healthContent } from '@/data/health'
 import { fetchDbHealth, fetchHealth } from '@/lib/api/health'
 
+// Page technique /health : vérifie à la demande le serveur et la base, hors parcours utilisateur.
 export default function HealthPage() {
   const serverCheck = useMutation({ mutationFn: fetchHealth })
   const databaseCheck = useMutation({ mutationFn: fetchDbHealth })

@@ -1,12 +1,23 @@
 import { expect, test } from '@playwright/test'
-import { connectedHeading, createAccount, headerLink, newMarcAccount, openSession, visitorHeading } from './support/auth.ts'
+import {
+  BACKEND_TEST_TIMEOUT,
+  connectedHeading,
+  createAccount,
+  expectAfterBackend,
+  headerLink,
+  newMarcAccount,
+  openSession,
+  visitorHeading,
+} from './support/auth.ts'
+
+test.describe.configure({ timeout: BACKEND_TEST_TIMEOUT })
 
 test('SM-1 : visiteur sans session, accueil en état visiteur (RM1)', async ({ page }) => {
   await page.context().clearCookies()
 
   await page.goto('/')
 
-  await expect(visitorHeading(page)).toBeVisible()
+  await expectAfterBackend(visitorHeading(page)).toBeVisible()
   await expect(page.getByText('Track tes résultats pour que les jours ne se ressemblent pas.')).toBeVisible()
   await expect(headerLink(page, 'Se connecter')).toBeVisible()
   await expect(headerLink(page, 'Créer un compte')).toBeVisible()
@@ -21,7 +32,7 @@ test('SM-2 : utilisateur connecté, titre avec son prénom (RM2)', async ({ page
 
   await page.goto('/')
 
-  await expect(connectedHeading(page, 'Marc')).toBeVisible()
+  await expectAfterBackend(connectedHeading(page, 'Marc')).toBeVisible()
   await expect(page.getByText('Renseigne ton daily du jour ci-dessous.')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Se déconnecter' })).toBeVisible()
   await expect(headerLink(page, 'Se connecter')).toHaveCount(0)

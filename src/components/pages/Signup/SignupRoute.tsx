@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import SignupPage from '@/components/pages/Signup/SignupPage'
 import { fetchSession, sessionQueryKey, signUp } from '@/lib/api/auth'
-import { normalizeEmail } from '@/logic/auth/email/email'
 import { authErrorDisplayFor, type AuthErrorDisplay } from '@/logic/auth/error/error'
+import { signupBodyFor } from '@/logic/auth/signupBody/signupBody'
 import { isSignupSubmitDisabled } from '@/logic/auth/submitButton/submitButton'
 import { invalidSignupFields, type SignupValues, visibleSignupFieldErrors } from '@/logic/auth/validation/validation'
 
@@ -34,11 +34,7 @@ export default function SignupRoute() {
     setServerError(null)
     if (invalidSignupFields(values).length > 0) return
 
-    signupMutation.mutate({
-      name: values.firstName.trim(),
-      email: normalizeEmail(values.email),
-      password: values.password,
-    })
+    signupMutation.mutate(signupBodyFor(values))
   }
 
   const fieldErrors = visibleSignupFieldErrors(values, hasBeenSubmitted)

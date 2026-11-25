@@ -9,7 +9,8 @@ const headed = process.env.HEADED === '1'
 
 export default defineConfig({
   testDir: 'e2e',
-  workers: headed ? 1 : undefined,
+  // Plafond à 3 : le backend compte une requête sign-in / sign-up en cours comme un échec jusqu'à sa réponse (limite 5 par minute et par IP).
+  workers: headed ? 1 : 3,
   reporter: 'list',
   use: {
     baseURL: 'http://localhost:5173',
