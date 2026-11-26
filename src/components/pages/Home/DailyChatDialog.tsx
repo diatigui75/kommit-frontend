@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { SendIcon } from 'lucide-react'
 import AssistantHeader from '@/components/pages/Home/AssistantHeader'
 import ChatMessage, { type ChatEntry } from '@/components/pages/Home/ChatMessage'
-import QuickReplies from '@/components/pages/Home/QuickReplies'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { dailyContent } from '@/data/daily'
@@ -12,7 +11,6 @@ import type { StreamErrorDisplay } from '@/logic/daily/streamError/streamError'
 type DailyChatDialogProps = {
   isOpen: boolean
   entries: ChatEntry[]
-  quickReplies?: string[]
   isAwaitingReply: boolean
   isStreaming: boolean
   error: StreamErrorDisplay | null
@@ -27,7 +25,6 @@ type DailyChatDialogProps = {
 export default function DailyChatDialog({
   isOpen,
   entries,
-  quickReplies = [],
   isAwaitingReply,
   isStreaming,
   error,
@@ -74,7 +71,6 @@ export default function DailyChatDialog({
               )}
             </div>
           )}
-          {quickReplies.length > 0 && <QuickReplies replies={quickReplies} onPick={send} />}
           <div ref={threadEndRef} />
         </div>
         <div className="flex justify-end px-3 pt-1">

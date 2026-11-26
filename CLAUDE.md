@@ -62,11 +62,12 @@ kommit-frontend/
 │   │       │   ├── HomeRoute.tsx         # session, toast d'arrivée et déconnexion
 │   │       │   ├── PageHeading.tsx       # titre avec partie en bleu et sous-titre
 │   │       │   ├── PastDailyDialog.tsx   # résumé d'un daily passé, en lecture seule
-│   │       │   ├── QuickReplies.tsx      # réponses rapides sous une bulle de l'assistant
 │   │       │   ├── QuitDailyDialog.tsx   # confirmation avant de quitter un daily non validé
 │   │       │   ├── ReplaceDailyDialog.tsx # alerte avant de remplacer le daily du jour (CA9)
 │   │       │   ├── TipNote.tsx           # note ASTUCE en post-it
-│   │       │   ├── useDailyStandup.ts    # état du daily : requêtes, conversation SSE, validation, modales
+│   │       │   ├── useDailyConversation.ts # saisie, conversation SSE, validation, popups quitter et remplacer
+│   │       │   ├── useDailyStandup.ts    # état du jour et titre, assemble les 2 hooks du daily
+│   │       │   ├── useStandupCalendar.ts # calendrier et modale du résumé passé
 │   │       │   └── YearCalendar.tsx      # calendrier des 53 dernières semaines
 │   │       ├── Signin/
 │   │       │   ├── SigninPage.tsx     # formulaire de connexion
@@ -83,6 +84,7 @@ kommit-frontend/
 │   │   ├── signin.ts      # textes de la connexion
 │   │   └── signup.ts      # textes de la création de compte
 │   ├── logic/
+│   │   ├── apiError/      # reconnaît une ApiError du serveur, partagé par les domaines
 │   │   ├── auth/          # logique pure de KOM-07, chaque unité avec son .test.ts
 │   │   │   ├── arrivalToast/ # message du toast selon l'origine (RM3, RM4, RM24, RM25)
 │   │   │   ├── email/        # normalisation de l'email (RM21)

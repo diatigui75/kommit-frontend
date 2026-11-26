@@ -68,6 +68,7 @@ export default function HomePage({
         <QuitDailyDialog {...daily.quit} />
         <ReplaceDailyDialog {...daily.replace} />
         <PastDailyDialog
+          isOpen={daily.pastDaily.isOpen}
           state={daily.pastDaily.state}
           dateLabel={daily.pastDaily.jour ? formatJour(daily.pastDaily.jour) : ''}
           onClose={daily.pastDaily.onClose}

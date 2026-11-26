@@ -1,4 +1,5 @@
 import { authContent } from '@/data/auth'
+import { isApiError } from '@/logic/apiError/apiError'
 import type { ApiError } from '@/types/apiContract'
 
 // Métier : on affiche le `message` du serveur, à l'emplacement choisi par le code.
@@ -13,12 +14,6 @@ const businessCodes: ReadonlySet<ApiError['code']> = new Set([
   'TOO_MANY_ATTEMPTS',
   'VALIDATION_ERROR',
 ])
-
-export const isApiError = (error: unknown): error is ApiError =>
-  typeof error === 'object' &&
-  error !== null &&
-  typeof (error as ApiError).code === 'string' &&
-  typeof (error as ApiError).message === 'string'
 
 export function authErrorDisplayFor(error: unknown): AuthErrorDisplay {
   if (isApiError(error)) {

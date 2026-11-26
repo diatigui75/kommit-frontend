@@ -16,7 +16,6 @@ const buttonVariants = cva(
         // Bouton « Se déconnecter »
         tertiary:
           "gap-2 rounded-lg bg-white py-3 pr-3 pl-4 text-base leading-6 font-semibold text-grey-blue hover:opacity-70 [&_svg:not([class*='size-'])]:size-6",
-        // Bouton des formulaires, à 30 % d'opacité quand il est désactivé
         // « Lancer le daily », grisé tant que le champ est vide
         launch:
           "gap-2 rounded-[4px] bg-primary px-4 py-2.5 text-sm leading-5 font-semibold text-primary-foreground shadow-button hover:opacity-80 disabled:opacity-30 [&_svg:not([class*='size-'])]:size-4",
@@ -28,6 +27,7 @@ const buttonVariants = cva(
           "gap-2 rounded-[4px] border border-destructive bg-white px-4 py-2.5 text-sm leading-5 font-semibold text-destructive hover:bg-destructive hover:text-white [&_svg:not([class*='size-'])]:size-4",
         // Croix de fermeture des modales
         icon: "size-8 rounded-md text-grey-blue hover:bg-muted [&_svg:not([class*='size-'])]:size-5",
+        // Bouton des formulaires, à 30 % d'opacité quand il est désactivé
         submit:
           "h-[43px] w-full gap-2 rounded-[4px] bg-linear-[132.93deg] from-primary to-blue-end text-sm leading-5 font-bold tracking-[-0.35px] text-primary-foreground shadow-button disabled:opacity-30 [&_svg:not([class*='size-'])]:size-4",
       },

@@ -1,5 +1,5 @@
 import { dailyContent } from '@/data/daily'
-import { isApiError } from '@/logic/auth/error/error'
+import { isApiError } from '@/logic/apiError/apiError'
 import type { Jour, Standup } from '@/types/apiContract'
 
 export type StandupQueryResult = {

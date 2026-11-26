@@ -37,7 +37,12 @@ const parseEventBlock = (block: string): SseEvent | null => {
 
 // POST /standups/conversation : le fil complet part, chaque événement SSE reçu est passé à `onEvent`.
 // Une erreur HTTP avant le flux rejette avec l'`ApiError` reçue ; un échec réseau avec une Error.
-export async function streamConversation(messages: Message[], onEvent: (event: SseEvent) => void): Promise<void> {
+// `signal` coupe la requête et la lecture du flux.
+export async function streamConversation(
+  messages: Message[],
+  onEvent: (event: SseEvent) => void,
+  signal?: AbortSignal,
+): Promise<void> {
   let response: Response
   try {
     response = await fetch(`${API_URL}/standups/conversation`, {
@@ -45,6 +50,7 @@ export async function streamConversation(messages: Message[], onEvent: (event: S
       credentials: 'include',
       headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
       body: JSON.stringify({ messages }),
+      signal,
     })
   } catch {
     throw new Error('Le serveur ne répond pas.')

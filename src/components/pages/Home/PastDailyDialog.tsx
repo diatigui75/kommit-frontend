@@ -6,17 +6,16 @@ import { dailyContent } from '@/data/daily'
 import type { SummaryDialogState } from '@/logic/daily/summaryDialog/summaryDialog'
 
 type PastDailyDialogProps = {
+  isOpen: boolean
   state: SummaryDialogState
   dateLabel: string
   onClose: () => void
 }
 
 // Résumé d'un daily passé, en lecture seule (CA14), avec un chargement pendant la requête (CA46).
-export default function PastDailyDialog({ state, dateLabel, onClose }: PastDailyDialogProps) {
-  const isOpen = state.kind === 'loading' || state.kind === 'summary'
-
+export default function PastDailyDialog({ isOpen, state, dateLabel, onClose }: PastDailyDialogProps) {
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={isOpen && (state.kind === 'loading' || state.kind === 'summary')} onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <AssistantHeader dateLabel={dateLabel} onClose={onClose} />
         <div className="px-4 py-4">
