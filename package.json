@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode dev",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
@@ -13,6 +13,9 @@
     "test:run": "vitest run",
     "test:e2e": "playwright test --project=deterministic",
     "test:e2e:headed": "HEADED=1 playwright test --project=deterministic",
+    "test:e2e:qa:parallel": "node --env-file=.env.qa node_modules/@playwright/test/cli.js test --project=deterministic",
+    "test:e2e:qa:seq": "node --env-file=.env.qa node_modules/@playwright/test/cli.js test --project=deterministic --workers=1",
+    "test:e2e:qa:seq:headed": "HEADED=1 node --env-file=.env.qa node_modules/@playwright/test/cli.js test --project=deterministic",
     "test:e2e:nondet": "playwright test --project=nondet --workers=1",
     "test:e2e:nondet:headed": "HEADED=1 playwright test --project=nondet"
   },

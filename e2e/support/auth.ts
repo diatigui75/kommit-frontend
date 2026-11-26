@@ -2,7 +2,8 @@ import { expect, type APIRequestContext, type Locator, type Page, type Route } f
 import pg from 'pg'
 
 export const API_URL = process.env.VITE_API_URL ?? 'http://localhost:3000'
-const FRONT_ORIGIN = 'http://localhost:5173'
+// Better Auth refuse une requête dont l'Origin n'est pas dans ses trustedOrigins : en QA, c'est le front déployé.
+const FRONT_ORIGIN = process.env.QA_BASE_URL ?? 'http://localhost:5173'
 
 export const SIGNUP_URL = `${API_URL}/api/auth/sign-up/email`
 export const SIGNIN_URL = `${API_URL}/api/auth/sign-in/email`
