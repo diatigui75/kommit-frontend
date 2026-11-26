@@ -3,6 +3,17 @@
     "CLAUDE_CODE_ENABLE_TODO_TOOLS": "1"
   },
   "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/ci-watch.sh"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
