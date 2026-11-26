@@ -11,6 +11,9 @@ kommit-frontend/
 ├── .claude/
 │   ├── rules/             # conventions du repo
 │   └── skills/            # skills Claude Code
+├── .github/
+│   └── workflows/
+│       └── ci.yml         # CI des PR vers dev : lint, build, tests unitaires
 ├── .vscode/
 │   └── settings.json
 ├── docs/
@@ -82,6 +85,7 @@ kommit-frontend/
 ├── .env.example           # modèle des variables d'environnement
 ├── .gitignore
 ├── .mcp.json              # serveurs MCP du projet (Figma)
+├── .nvmrc                 # version de Node (24), lue par la CI
 ├── CLAUDE.md              # ce fichier
 ├── components.json        # config de la CLI shadcn
 ├── eslint.config.js       # config ESLint, imports en @/
