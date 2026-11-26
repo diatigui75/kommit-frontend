@@ -30,7 +30,9 @@ kommit-frontend/
 │   ├── inventaire-KOM-07.md # classement des RM de KOM-07 par type de test
 │   ├── inventaire-KOM-19.md # classement des CA de KOM-19 (saisie et chat du daily)
 │   ├── inventaire-KOM-22.md # classement des CA de KOM-22 (calendrier et résumé passé)
-│   └── smokes-KOM-07.md     # scénarios de smoke de KOM-07
+│   ├── smokes-KOM-07.md     # scénarios de smoke de KOM-07
+│   ├── smokes-KOM-19.md     # scénarios de smoke de KOM-19
+│   └── smokes-KOM-22.md     # scénarios de smoke de KOM-22
 ├── src/
 │   ├── main.tsx           # point d'entrée, monte l'app dans le DOM
 │   ├── App.tsx            # providers, routes (/, /signup, /signin, /health) et Toaster
@@ -88,8 +90,22 @@ kommit-frontend/
 │   │   │   ├── signupBody/   # corps envoyé au signup : prénom trimé, email normalisé
 │   │   │   ├── submitButton/ # bouton de soumission activé ou non (RM17, RM19, RM32, RM33)
 │   │   │   └── validation/   # critères du signup et visibilité des erreurs (RM10, RM11, RM20, RM30)
-│   │   └── daily/
-│   │       └── calendarGrid/ # grille des 53 semaines, jours renseignés et débuts de mois
+│   │   └── daily/         # logique pure de KOM-19 et KOM-22, chaque unité avec son .test.ts
+│   │       ├── calendarGrid/     # grille des 53 semaines, jours renseignés et débuts de mois (CA11, CA12, CA13, CA37)
+│   │       ├── calendarQuery/    # bornes from/to de la requête du calendrier (CA11, CA37)
+│   │       ├── calendarState/    # compteur, cases ou erreur du calendrier (CA11, CA43)
+│   │       ├── composer/         # envoi désactivé si message vide ou IA en train d'écrire (CA39, CA40)
+│   │       ├── conversation/     # fil de messages envoyé à chaque tour (CA2)
+│   │       ├── quitConfirmation/ # conversation non validée, confirmation avant de quitter (CA7, CA44)
+│   │       ├── standupBody/      # corps de POST /standups, dernier résumé reçu (CA10, CA26)
+│   │       ├── streamError/      # erreur du flux → message et type (CA29, CA31, CA32)
+│   │       ├── streamTurn/       # événements SSE → texte, résumé, erreur (CA4, CA26, CA29, CA34)
+│   │       ├── summaryBlocks/    # sections du résumé à afficher (CA5, CA10)
+│   │       ├── summaryDialog/    # état de la modale du résumé passé (CA45, CA46)
+│   │       ├── summaryItems/     # items d'une section, « Aucun » si vide (CA30)
+│   │       ├── today/            # aujourd'hui en Europe/Paris depuis une horloge (CA11, CA37)
+│   │       ├── todayStatus/      # titre « à faire » ou « déjà fait », confirmation de remplacement (CA1, CA8, CA9, CA42)
+│   │       └── validateButton/   # « Valider mon standup » activé ou non (CA6, CA25, CA27, CA32)
 │   ├── lib/
 │   │   ├── api/
 │   │   │   ├── apiClient.ts # URL du backend, cookie de session, JSON et erreurs
