@@ -24,9 +24,12 @@ kommit-frontend/
 │   └── support/
 │       └── auth.ts        # helpers : email unique, compte et session par l'API, requêtes bloquées
 ├── maquettes/
-│   └── F1/                # maquette brute du flux d'authentification (code, screenshots, assets, FLOW.md)
+│   ├── F1/                # maquette brute du flux d'authentification (code, screenshots, assets, FLOW.md)
+│   └── F2/                # captures du flux du daily et FLOW.md (sans extraction Figma)
 ├── testing/
 │   ├── inventaire-KOM-07.md # classement des RM de KOM-07 par type de test
+│   ├── inventaire-KOM-19.md # classement des CA de KOM-19 (saisie et chat du daily)
+│   ├── inventaire-KOM-22.md # classement des CA de KOM-22 (calendrier et résumé passé)
 │   └── smokes-KOM-07.md     # scénarios de smoke de KOM-07
 ├── src/
 │   ├── main.tsx           # point d'entrée, monte l'app dans le DOM
@@ -36,7 +39,7 @@ kommit-frontend/
 │   │   └── F1/
 │   │       └── logo.png   # logo Kommit
 │   ├── components/
-│   │   ├── ui/            # shadcn (badge, button, card, input, label, sonner) et génériques
+│   │   ├── ui/            # shadcn (alert-dialog, badge, button, card, dialog, input, label, sonner, textarea) et génériques
 │   │   │   ├── AuthCard.tsx    # carte des formulaires signup / signin
 │   │   │   ├── Footer.tsx      # crédit ViDev
 │   │   │   ├── Logo.tsx        # icône et nom Kommit
@@ -48,9 +51,20 @@ kommit-frontend/
 │   │       │   ├── HealthPage.tsx     # lance les vérifications via TanStack Query
 │   │       │   └── ConnectionCard.tsx # carte avec bouton et résultat d'une vérification
 │   │       ├── Home/
-│   │       │   ├── HomePage.tsx       # accueil visiteur ou connecté
-│   │       │   ├── HomeRoute.tsx      # session, toast d'arrivée et déconnexion
-│   │       │   └── PageHeading.tsx    # titre avec partie en bleu et sous-titre
+│   │       │   ├── AssistantHeader.tsx   # en-tête des modales du daily : assistant, statut ou date, croix
+│   │       │   ├── ChatMessage.tsx       # bulle du chat, utilisateur ou assistant
+│   │       │   ├── DailyChatDialog.tsx   # modale du chat du daily
+│   │       │   ├── DailyEntryCard.tsx    # saisie du daily et bouton « Lancer le daily »
+│   │       │   ├── DailySummary.tsx      # encart Hier / Blocages / À venir
+│   │       │   ├── demoConversation.ts   # TEMPORAIRE : conversation scriptée F2, à retirer avant la PR
+│   │       │   ├── HomePage.tsx          # accueil visiteur ou connecté
+│   │       │   ├── HomeRoute.tsx         # session, toast d'arrivée et déconnexion
+│   │       │   ├── PageHeading.tsx       # titre avec partie en bleu et sous-titre
+│   │       │   ├── PastDailyDialog.tsx   # résumé d'un daily passé, en lecture seule
+│   │       │   ├── QuickReplies.tsx      # réponses rapides sous une bulle de l'assistant
+│   │       │   ├── QuitDailyDialog.tsx   # confirmation avant de quitter un daily non validé
+│   │       │   ├── TipNote.tsx           # note ASTUCE en post-it
+│   │       │   └── YearCalendar.tsx      # calendrier des 53 dernières semaines
 │   │       ├── Signin/
 │   │       │   ├── SigninPage.tsx     # formulaire de connexion
 │   │       │   └── SigninRoute.tsx    # saisie, appel signin et erreurs
@@ -59,20 +73,23 @@ kommit-frontend/
 │   │           └── SignupRoute.tsx    # saisie, validation, appel signup et erreurs
 │   ├── data/
 │   │   ├── auth.ts        # textes communs à signup et signin
+│   │   ├── daily.ts       # textes du daily (saisie, calendrier, chat, popup)
 │   │   ├── health.ts      # textes de la page /health
 │   │   ├── home.ts        # textes de l'accueil
 │   │   ├── layout.ts      # textes du header et du footer
 │   │   ├── signin.ts      # textes de la connexion
 │   │   └── signup.ts      # textes de la création de compte
 │   ├── logic/
-│   │   └── auth/          # logique pure de KOM-07, chaque unité avec son .test.ts
-│   │       ├── arrivalToast/ # message du toast selon l'origine (RM3, RM4, RM24, RM25)
-│   │       ├── email/        # normalisation de l'email (RM21)
-│   │       ├── error/        # ApiError ou échec réseau → message et emplacement (RM9, RM13, RM18)
-│   │       ├── session/      # état visiteur et titre de l'accueil (RM1, RM2)
-│   │       ├── signupBody/   # corps envoyé au signup : prénom trimé, email normalisé
-│   │       ├── submitButton/ # bouton de soumission activé ou non (RM17, RM19, RM32, RM33)
-│   │       └── validation/   # critères du signup et visibilité des erreurs (RM10, RM11, RM20, RM30)
+│   │   ├── auth/          # logique pure de KOM-07, chaque unité avec son .test.ts
+│   │   │   ├── arrivalToast/ # message du toast selon l'origine (RM3, RM4, RM24, RM25)
+│   │   │   ├── email/        # normalisation de l'email (RM21)
+│   │   │   ├── error/        # ApiError ou échec réseau → message et emplacement (RM9, RM13, RM18)
+│   │   │   ├── session/      # état visiteur et titre de l'accueil (RM1, RM2)
+│   │   │   ├── signupBody/   # corps envoyé au signup : prénom trimé, email normalisé
+│   │   │   ├── submitButton/ # bouton de soumission activé ou non (RM17, RM19, RM32, RM33)
+│   │   │   └── validation/   # critères du signup et visibilité des erreurs (RM10, RM11, RM20, RM30)
+│   │   └── daily/
+│   │       └── calendarGrid/ # grille des 53 semaines, jours renseignés et débuts de mois
 │   ├── lib/
 │   │   ├── api/
 │   │   │   ├── apiClient.ts # URL du backend, cookie de session, JSON et erreurs
