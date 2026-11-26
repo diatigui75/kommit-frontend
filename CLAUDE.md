@@ -30,7 +30,8 @@ kommit-frontend/
 │   └── support/
 │       └── auth.ts        # helpers : email unique, compte et session par l'API, requêtes bloquées
 ├── maquettes/
-│   └── F1/                # maquette brute du flux d'authentification (code, screenshots, assets, FLOW.md)
+│   ├── F1/                # maquette brute du flux d'authentification (code, screenshots, assets, FLOW.md)
+│   └── F2/                # maquette du flux du daily standup (code reconstruit depuis F1, screenshots, assets, FLOW.md)
 ├── testing/
 │   ├── inventaire-KOM-07.md # classement des RM de KOM-07 par type de test
 │   └── smokes-KOM-07.md     # scénarios de smoke de KOM-07
