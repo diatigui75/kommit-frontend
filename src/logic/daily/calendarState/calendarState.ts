@@ -1,3 +1,5 @@
+import { dailyContent } from '@/data/daily'
+import { isApiError } from '@/logic/auth/error/error'
 import type { GetCalendrierResponse, Jour } from '@/types/apiContract'
 
 export type CalendarQueryResult = {
@@ -12,6 +14,12 @@ export type CalendarState =
   | { kind: 'ready'; count: number; recordedJours: Jour[] }
   | { kind: 'error'; message: string }
 
-export function calendarStateFor(_query: CalendarQueryResult): CalendarState {
+export function calendarStateFor(query: CalendarQueryResult): CalendarState {
+  if (query.status === 'success' && query.data) {
+    return { kind: 'ready', count: query.data.count, recordedJours: query.data.jours }
+  }
+  if (query.status === 'error') {
+    return { kind: 'error', message: isApiError(query.error) ? query.error.message : dailyContent.outageMessage }
+  }
   return { kind: 'loading' }
 }

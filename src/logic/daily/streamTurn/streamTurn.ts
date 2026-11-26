@@ -9,10 +9,13 @@ export type StreamTurn = {
 
 export const emptyStreamTurn: StreamTurn = { reply: '', summary: null, error: null }
 
-export function applySseEvent(_turn: StreamTurn, _event: SseEvent): StreamTurn {
-  return { reply: '', summary: null, error: null }
+export function applySseEvent(turn: StreamTurn, event: SseEvent): StreamTurn {
+  if (event.type === 'token') return { ...turn, reply: turn.reply + event.text }
+  if (event.type === 'summary') return { ...turn, summary: event.summary }
+  return { ...turn, error: event.error }
 }
 
-export function isAwaitingFirstToken(_turn: StreamTurn, _isStreaming: boolean): boolean {
-  return false
+// Indicateur d'attente entre l'envoi et le 1er token (CA34).
+export function isAwaitingFirstToken(turn: StreamTurn, isStreaming: boolean): boolean {
+  return isStreaming && turn.reply === '' && turn.error === null
 }

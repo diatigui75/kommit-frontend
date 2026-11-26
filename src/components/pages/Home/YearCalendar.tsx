@@ -1,30 +1,44 @@
 import { useEffect, useRef } from 'react'
+import { LoaderCircleIcon } from 'lucide-react'
 import { cn } from 'cn'
 import { dailyContent } from '@/data/daily'
 import { calendarGrid } from '@/logic/daily/calendarGrid/calendarGrid'
+import type { CalendarState } from '@/logic/daily/calendarState/calendarState'
 import type { Jour } from '@/types/apiContract'
 
 type YearCalendarProps = {
   today: Jour
-  count: number
-  recordedJours: Jour[]
+  state: CalendarState
   onOpenDay: (jour: Jour) => void
 }
 
-// Calendrier des 53 dernières semaines. Une case enregistrée est cerclée de vert et ouvre son résumé.
-export default function YearCalendar({ today, count, recordedJours, onOpenDay }: YearCalendarProps) {
+// Calendrier des 53 dernières semaines, du dimanche au samedi (CA11). Une case verte ouvre son résumé (CA14), une grise rien (CA15).
+export default function YearCalendar({ today, state, onOpenDay }: YearCalendarProps) {
+  const recordedJours = state.kind === 'ready' ? state.recordedJours : []
   const { weeks, months } = calendarGrid(today, recordedJours)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   // Sur petit écran, la grille défile : on l'ouvre sur les semaines récentes.
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollLeft = scrollRef.current.scrollWidth
-  }, [])
+  }, [state.kind])
+
+  if (state.kind !== 'ready') {
+    return (
+      <section className="flex w-full max-w-[600px] justify-center rounded-lg border border-card-border bg-white p-4 text-sm text-grey-blue shadow-card">
+        {state.kind === 'loading' ? (
+          <LoaderCircleIcon className="size-5 animate-spin" aria-label={dailyContent.calendar.loadingLabel} />
+        ) : (
+          <p role="alert">{state.message}</p>
+        )}
+      </section>
+    )
+  }
 
   return (
     <section className="w-full max-w-[600px] rounded-lg border border-card-border bg-white p-4 shadow-card">
       <h2 className="text-sm leading-5 font-bold text-foreground">
-        {count}
+        {state.count}
         {dailyContent.calendar.titleEnd}
       </h2>
       <div ref={scrollRef} className="mt-4 overflow-x-auto">
@@ -44,7 +58,16 @@ export default function YearCalendar({ today, count, recordedJours, onOpenDay }:
               {weeks.map((days, week) => {
                 const day = days[weekday]
                 if (!day) return <span key={week} />
-                if (!day.isRecorded) return <span key={week} className="size-2 rounded-[1px] bg-day-empty" />
+                if (!day.isRecorded) {
+                  return (
+                    <span
+                      key={week}
+                      role="img"
+                      aria-label={`${dailyContent.calendar.emptyDayLabel}${day.jour}`}
+                      className="size-2 rounded-[1px] bg-day-empty"
+                    />
+                  )
+                }
                 return (
                   <button
                     key={week}

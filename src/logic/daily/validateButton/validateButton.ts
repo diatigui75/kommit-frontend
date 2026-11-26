@@ -5,6 +5,7 @@ export type ValidateButtonState = {
   isSaving: boolean
 }
 
-export function isValidateDisabled(_state: ValidateButtonState): boolean {
-  return false
+// Actif dès qu'un récap est reçu (CA6, CA25), inactif pendant l'enregistrement (CA27).
+export function isValidateDisabled(state: ValidateButtonState): boolean {
+  return state.summary === null || state.isSaving
 }

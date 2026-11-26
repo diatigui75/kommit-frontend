@@ -58,14 +58,15 @@ kommit-frontend/
 │   │       │   ├── DailyChatDialog.tsx   # modale du chat du daily
 │   │       │   ├── DailyEntryCard.tsx    # saisie du daily et bouton « Lancer le daily »
 │   │       │   ├── DailySummary.tsx      # encart Hier / Blocages / À venir
-│   │       │   ├── demoConversation.ts   # TEMPORAIRE : conversation scriptée F2, à retirer avant la PR
 │   │       │   ├── HomePage.tsx          # accueil visiteur ou connecté
 │   │       │   ├── HomeRoute.tsx         # session, toast d'arrivée et déconnexion
 │   │       │   ├── PageHeading.tsx       # titre avec partie en bleu et sous-titre
 │   │       │   ├── PastDailyDialog.tsx   # résumé d'un daily passé, en lecture seule
 │   │       │   ├── QuickReplies.tsx      # réponses rapides sous une bulle de l'assistant
 │   │       │   ├── QuitDailyDialog.tsx   # confirmation avant de quitter un daily non validé
+│   │       │   ├── ReplaceDailyDialog.tsx # alerte avant de remplacer le daily du jour (CA9)
 │   │       │   ├── TipNote.tsx           # note ASTUCE en post-it
+│   │       │   ├── useDailyStandup.ts    # état du daily : requêtes, conversation SSE, validation, modales
 │   │       │   └── YearCalendar.tsx      # calendrier des 53 dernières semaines
 │   │       ├── Signin/
 │   │       │   ├── SigninPage.tsx     # formulaire de connexion
@@ -110,7 +111,8 @@ kommit-frontend/
 │   │   ├── api/
 │   │   │   ├── apiClient.ts # URL du backend, cookie de session, JSON et erreurs
 │   │   │   ├── auth.ts      # appels Better Auth (session, signup, signin, signout)
-│   │   │   └── health.ts    # appels à /health et /db-health
+│   │   │   ├── health.ts    # appels à /health et /db-health
+│   │   │   └── standup.ts   # appels /standups (jour, calendrier, résumé, validation) et flux SSE de la conversation
 │   │   ├── queryClient.ts # client TanStack Query
 │   │   └── utils.ts       # helper cn() de shadcn
 │   └── types/

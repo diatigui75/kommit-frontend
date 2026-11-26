@@ -14,7 +14,7 @@ const businessCodes: ReadonlySet<ApiError['code']> = new Set([
   'VALIDATION_ERROR',
 ])
 
-const isApiError = (error: unknown): error is ApiError =>
+export const isApiError = (error: unknown): error is ApiError =>
   typeof error === 'object' &&
   error !== null &&
   typeof (error as ApiError).code === 'string' &&

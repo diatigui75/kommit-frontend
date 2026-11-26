@@ -7,11 +7,12 @@ import { dailyContent } from '@/data/daily'
 type DailyEntryCardProps = {
   value: string
   onChange: (value: string) => void
+  isLaunchDisabled: boolean
   onLaunch: () => void
 }
 
-// Carte de saisie du daily. La note ASTUCE disparaît dès que le champ contient du texte.
-export default function DailyEntryCard({ value, onChange, onLaunch }: DailyEntryCardProps) {
+// Carte de saisie du daily, bouton inactif sur une zone vide ou blanche (CA39). La note ASTUCE disparaît dès qu'on tape.
+export default function DailyEntryCard({ value, onChange, isLaunchDisabled, onLaunch }: DailyEntryCardProps) {
   const isEmpty = value.trim() === ''
 
   return (
@@ -24,7 +25,7 @@ export default function DailyEntryCard({ value, onChange, onLaunch }: DailyEntry
         onChange={(event) => onChange(event.target.value)}
       />
       <div className="mt-4 flex justify-end border-t border-border pt-4">
-        <Button variant="launch" type="button" disabled={isEmpty} onClick={onLaunch}>
+        <Button variant="launch" type="button" disabled={isLaunchDisabled} onClick={onLaunch}>
           {dailyContent.entry.launchLabel}
           <SendIcon aria-hidden />
         </Button>

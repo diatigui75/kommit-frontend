@@ -15,11 +15,12 @@ export type MonthMarker = {
 }
 
 export type CalendarGrid = {
-  // Une semaine par colonne, du lundi au dimanche. null = jour à venir.
+  // Une semaine par colonne, du dimanche au samedi. null = jour à venir.
   weeks: (CalendarDay | null)[][]
   months: MonthMarker[]
 }
 
+// Les jours sont calculés en UTC pur : aucun changement d'heure ne décale une case (CA37).
 function toTime(jour: Jour): number {
   const [year, month, day] = jour.split('-').map(Number)
   return Date.UTC(year, month - 1, day)
@@ -29,11 +30,16 @@ function toJour(time: number): Jour {
   return new Date(time).toISOString().slice(0, 10)
 }
 
-// Fenêtre glissante de 53 semaines qui se termine sur la semaine d'aujourd'hui.
+// Premier dimanche de la fenêtre de 53 semaines qui se termine sur la semaine d'aujourd'hui (CA11).
+export function firstJourOfWindow(today: Jour): Jour {
+  const todayTime = toTime(today)
+  const todayWeekday = new Date(todayTime).getUTCDay()
+  return toJour(todayTime - (todayWeekday + (WEEK_COUNT - 1) * DAYS_PER_WEEK) * DAY_MS)
+}
+
 export function calendarGrid(today: Jour, recordedJours: Jour[]): CalendarGrid {
   const todayTime = toTime(today)
-  const todayWeekday = (new Date(todayTime).getUTCDay() + 6) % DAYS_PER_WEEK
-  const firstMonday = todayTime - (todayWeekday + (WEEK_COUNT - 1) * DAYS_PER_WEEK) * DAY_MS
+  const firstSunday = toTime(firstJourOfWindow(today))
   const recorded = new Set(recordedJours)
 
   const weeks: (CalendarDay | null)[][] = []
@@ -42,7 +48,7 @@ export function calendarGrid(today: Jour, recordedJours: Jour[]): CalendarGrid {
   for (let week = 0; week < WEEK_COUNT; week++) {
     const days: (CalendarDay | null)[] = []
     for (let weekday = 0; weekday < DAYS_PER_WEEK; weekday++) {
-      const time = firstMonday + (week * DAYS_PER_WEEK + weekday) * DAY_MS
+      const time = firstSunday + (week * DAYS_PER_WEEK + weekday) * DAY_MS
       const date = new Date(time)
       if (date.getUTCDate() === 1) months.push({ monthIndex: date.getUTCMonth(), week })
       const jour = toJour(time)

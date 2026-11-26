@@ -5,6 +5,7 @@ export type ConversationProgress = {
   isSaved: boolean
 }
 
-export function isConversationUnfinished(_progress: ConversationProgress): boolean {
-  return false
+// Un échange commencé et non enregistré serait perdu : on confirme avant de fermer (CA7, CA44).
+export function isConversationUnfinished(progress: ConversationProgress): boolean {
+  return progress.messages.length > 0 && !progress.isSaved
 }

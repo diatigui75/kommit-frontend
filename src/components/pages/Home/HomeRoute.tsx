@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import HomePage from '@/components/pages/Home/HomePage'
+import { useDailyStandup } from '@/components/pages/Home/useDailyStandup'
 import { fetchSession, sessionQueryKey, signOut } from '@/lib/api/auth'
 import { arrivalToastFor, type ArrivalOrigin } from '@/logic/auth/arrivalToast/arrivalToast'
 import { authErrorDisplayFor } from '@/logic/auth/error/error'
@@ -10,7 +11,7 @@ import { isVisitor } from '@/logic/auth/session/session'
 
 type ArrivalState = { arrivalOrigin?: ArrivalOrigin } | null
 
-// Câble l'accueil : session (RM1, RM2), toast d'arrivée (RM3, RM4, RM24, RM25), déconnexion (RM5, échec en toast d'erreur).
+// Câble l'accueil : session (RM1, RM2), toast d'arrivée (RM3, RM4, RM24, RM25), déconnexion (RM5, échec en toast d'erreur), daily (KOM-19, KOM-22).
 export default function HomeRoute() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -41,9 +42,13 @@ export default function HomeRoute() {
     },
   })
 
+  const firstName = isVisitor(session) ? undefined : session?.user.name
+  const daily = useDailyStandup(firstName)
+
   return (
     <HomePage
-      firstName={isVisitor(session) ? undefined : session?.user.name}
+      firstName={firstName}
+      daily={daily}
       onSignOut={() => signOutMutation.mutate()}
       isSessionPending={sessionQuery.isPending}
       isSignOutPending={signOutMutation.isPending}

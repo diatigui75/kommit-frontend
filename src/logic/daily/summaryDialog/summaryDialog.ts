@@ -1,3 +1,5 @@
+import { dailyContent } from '@/data/daily'
+import { isApiError } from '@/logic/auth/error/error'
 import type { Jour, Standup } from '@/types/apiContract'
 
 export type StandupQueryResult = {
@@ -14,6 +16,12 @@ export type SummaryDialogState =
   | { kind: 'summary'; standup: Standup }
   | { kind: 'standupGone'; message: string; shouldRefreshCalendar: true }
 
-export function summaryDialogStateFor(_query: StandupQueryResult): SummaryDialogState {
-  return { kind: 'closed' }
+export function summaryDialogStateFor(query: StandupQueryResult): SummaryDialogState {
+  if (query.selectedJour === null) return { kind: 'closed' }
+  if (query.status === 'success' && query.data) return { kind: 'summary', standup: query.data }
+  if (query.status === 'error') {
+    const message = isApiError(query.error) ? query.error.message : dailyContent.outageMessage
+    return { kind: 'standupGone', message, shouldRefreshCalendar: true }
+  }
+  return { kind: 'loading' }
 }

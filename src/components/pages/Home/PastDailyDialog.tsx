@@ -1,30 +1,38 @@
+import { LoaderCircleIcon } from 'lucide-react'
 import AssistantHeader from '@/components/pages/Home/AssistantHeader'
 import DailySummary from '@/components/pages/Home/DailySummary'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { dailyContent } from '@/data/daily'
-import type { Standup } from '@/types/apiContract'
+import type { SummaryDialogState } from '@/logic/daily/summaryDialog/summaryDialog'
 
 type PastDailyDialogProps = {
-  standup: Standup | null
+  state: SummaryDialogState
   dateLabel: string
   onClose: () => void
 }
 
-// Résumé d'un daily passé, en lecture seule : pas de champ de saisie.
-export default function PastDailyDialog({ standup, dateLabel, onClose }: PastDailyDialogProps) {
+// Résumé d'un daily passé, en lecture seule (CA14), avec un chargement pendant la requête (CA46).
+export default function PastDailyDialog({ state, dateLabel, onClose }: PastDailyDialogProps) {
+  const isOpen = state.kind === 'loading' || state.kind === 'summary'
+
   return (
-    <Dialog open={standup !== null} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <AssistantHeader dateLabel={dateLabel} onClose={onClose} />
-        {standup && (
-          <div className="px-4 py-4">
+        <div className="px-4 py-4">
+          {state.kind === 'summary' ? (
             <div className="max-w-[80%] rounded-xl bg-bubble px-4 py-3 text-xs leading-5 text-foreground">
               {dailyContent.pastDaily.intro}
               {dateLabel}
-              <DailySummary summary={standup.summary} />
+              <DailySummary summary={state.standup.summary} />
             </div>
-          </div>
-        )}
+          ) : (
+            <LoaderCircleIcon
+              className="mx-auto size-5 animate-spin text-grey-blue"
+              aria-label={dailyContent.pastDaily.loadingLabel}
+            />
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   )
