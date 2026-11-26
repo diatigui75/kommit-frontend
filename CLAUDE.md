@@ -96,5 +96,6 @@ kommit-frontend/
 ├── tsconfig.json          # références vers les 2 tsconfig ci-dessous
 ├── tsconfig.app.json      # config TypeScript de src/, alias @/
 ├── tsconfig.node.json     # config TypeScript de vite.config.ts
+├── vercel.json            # build Vercel et réécriture SPA vers index.html
 └── vite.config.ts
 ```
