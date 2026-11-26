@@ -14,7 +14,8 @@ kommit-frontend/
 │   │   ├── ci-fix-guard.py # PreToolUse du worker : bloque push hors branche, merge, modif des tests/lint/CI
 │   │   ├── ci-fix.sh       # attend la CI d'une PR ; si rouge, lance un worker qui la corrige
 │   │   ├── ci-watch.sh     # hook PostToolUse : après gh pr create, lance ci-fix.sh en arrière-plan
-│   │   └── lint.sh         # hook Stop : lance pnpm lint
+│   │   ├── lint.sh         # hook Stop : lance pnpm lint
+│   │   └── qa-guard.py     # PreToolUse : pendant /run-qa, bloque toute modification d'un e2e existant
 │   ├── rules/             # conventions du repo
 │   └── skills/            # skills Claude Code
 ├── .github/
@@ -34,7 +35,8 @@ kommit-frontend/
 │   └── F2/                # maquette du flux du daily standup (code reconstruit depuis F1, screenshots, assets, FLOW.md)
 ├── testing/
 │   ├── inventaire-KOM-07.md # classement des RM de KOM-07 par type de test
-│   └── smokes-KOM-07.md     # scénarios de smoke de KOM-07
+│   ├── smokes-KOM-07.md     # scénarios de smoke de KOM-07
+│   └── qa/                  # rapports de /run-qa, un dossier par run (rapport, couverture, captures)
 ├── src/
 │   ├── main.tsx           # point d'entrée, monte l'app dans le DOM
 │   ├── App.tsx            # providers, routes (/, /signup, /signin, /health) et Toaster
@@ -93,7 +95,7 @@ kommit-frontend/
 ├── .env.prod.example      # modèle du .env.prod (backend de prod)
 ├── .env.qa.example        # modèle du .env.qa, lu par pnpm test:e2e:qa:* (app déployée en DEV)
 ├── .gitignore
-├── .mcp.json              # serveurs MCP du projet (Figma)
+├── .mcp.json              # serveurs MCP du projet (Figma, Playwright pour la passe 2 de /run-qa)
 ├── .nvmrc                 # version de Node (24), lue par la CI
 ├── CLAUDE.md              # ce fichier
 ├── components.json        # config de la CLI shadcn
