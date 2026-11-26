@@ -89,7 +89,9 @@ kommit-frontend/
 │   │   └── utils.ts       # helper cn() de shadcn
 │   └── types/
 │       └── apiContract.ts # réponses du backend
-├── .env.example           # modèle des variables d'environnement
+├── .env.dev.example       # modèle du .env.dev, lu par pnpm dev (backend en local)
+├── .env.prod.example      # modèle du .env.prod (backend de prod)
+├── .env.qa.example        # modèle du .env.qa, lu par pnpm test:e2e:qa:* (app déployée en DEV)
 ├── .gitignore
 ├── .mcp.json              # serveurs MCP du projet (Figma)
 ├── .nvmrc                 # version de Node (24), lue par la CI
@@ -98,7 +100,7 @@ kommit-frontend/
 ├── eslint.config.js       # config ESLint, imports en @/
 ├── index.html
 ├── package.json
-├── playwright.config.ts   # config Playwright, projets deterministic et nondet
+├── playwright.config.ts   # config Playwright, projets deterministic et nondet, lien déployé si QA_BASE_URL
 ├── pnpm-lock.yaml
 ├── tsconfig.json          # références vers les 2 tsconfig ci-dessous
 ├── tsconfig.app.json      # config TypeScript de src/, alias @/
