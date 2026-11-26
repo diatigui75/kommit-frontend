@@ -11,7 +11,7 @@ export type SignupField = keyof SignupValues
 // Message d'erreur à afficher sous chaque champ invalide, absent si le champ est valide.
 export type SignupFieldErrors = Partial<Record<SignupField, string>>
 
-const PASSWORD_MIN_LENGTH = 8
+const PASSWORD_MIN_LENGTH = 6
 
 // Partie locale, @, domaine avec au moins une extension : `marc@test` est refusé.
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
