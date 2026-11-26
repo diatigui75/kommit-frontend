@@ -24,3 +24,8 @@ dist/
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# QA (/run-qa) : session en cours et sortie brute du MCP Playwright
+.claude/qa-session.json
+testing/qa/.mcp-output/
+testing/qa/*/passe1*.json
