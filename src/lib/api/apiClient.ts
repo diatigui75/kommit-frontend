@@ -16,6 +16,30 @@ export const getJson = async <T>(path: string): Promise<T> => {
   return (await response.json()) as T
 }
 
+// Flux SSE lu en fetch + ReadableStream : EventSource ne fait que des GET sans corps (contrainte de KOM-19).
+export async function* postTextStream(path: string, body: unknown, signal?: AbortSignal): AsyncGenerator<string> {
+  const response = await send(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    signal,
+  })
+  if (!response.ok || !response.body) throw await response.json().catch(() => null)
+
+  const reader = response.body.pipeThrough(new TextDecoderStream()).getReader()
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) return
+      yield value
+    }
+  } catch {
+    throw new Error('Le serveur ne répond pas.')
+  } finally {
+    reader.releaseLock()
+  }
+}
+
 // Sur une erreur HTTP, rejette avec le corps reçu (une `ApiError` d'après le contrat).
 export const requestJson = async <T>(path: string, method: 'GET' | 'POST', body?: unknown): Promise<T> => {
   const response = await send(path, {

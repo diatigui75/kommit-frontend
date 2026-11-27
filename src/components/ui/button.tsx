@@ -19,6 +19,15 @@ const buttonVariants = cva(
         // Bouton des formulaires, à 30 % d'opacité quand il est désactivé
         submit:
           "h-[43px] w-full gap-2 rounded-[4px] bg-linear-[132.93deg] from-primary to-blue-end text-sm leading-5 font-bold tracking-[-0.35px] text-primary-foreground shadow-button disabled:opacity-30 [&_svg:not([class*='size-'])]:size-4",
+        // « Lancer le daily » : le primary avec une icône d'envoi, grisé tant que la zone est vide
+        launch:
+          "gap-2 rounded-[4px] border border-primary bg-linear-to-r from-primary to-blue-end px-4 py-3 text-base leading-6 font-semibold text-primary-foreground hover:opacity-80 disabled:opacity-30 [&_svg:not([class*='size-'])]:size-5",
+        // « Quitter le daily » : contour rouge, plein au survol
+        danger:
+          "gap-2 rounded-[4px] border border-danger bg-white px-4 py-3 text-base leading-6 font-semibold text-danger hover:bg-danger hover:text-white [&_svg:not([class*='size-'])]:size-5",
+        // Choix dans une bulle du chat : « Oui, je valide le daily »
+        chip:
+          "rounded-lg border border-field-border bg-white px-3 py-1.5 text-xs leading-4 font-medium text-primary hover:bg-field disabled:opacity-40",
       },
     },
     defaultVariants: {
