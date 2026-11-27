@@ -15,10 +15,22 @@ export const standupContent = {
   },
   calendar: {
     countSuffix: " daily renseigné(s) sur l'année",
-    months: ['juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.', 'janv.', 'févr.', 'mars', 'avr.', 'mai'],
-    dayLabels: ['Lun', '', 'Mer', '', 'Ven', '', ''],
+    // Index 0 = janvier : le libellé d'une colonne vient du mois de sa 1re journée.
+    months: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
+    // Semaines du dimanche au samedi (CA11) : une ligne vide au-dessus de « Lun ».
+    dayLabels: ['', 'Lun', '', 'Mer', '', 'Ven', ''],
     emptyLegend: 'Daily non renseigné',
     filledLegend: 'Daily enregistré',
+    dayButtonPrefix: 'Voir le daily du ',
+    loadingLabel: 'Chargement du calendrier',
+    errorMessage: "Ton calendrier n'a pas pu être chargé. Réessaie dans un instant.",
+  },
+  summaryDialog: {
+    datePrefix: 'En date du ',
+    intro: 'Voici le résumé du daily du ',
+    loadingLabel: 'Chargement du résumé',
+    closeLabel: 'Fermer le résumé',
+    notFoundMessage: "Ce standup n'existe plus, le calendrier a été mis à jour.",
   },
   chat: {
     title: 'Daily Standup Assistant',

@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import HomePage from '@/components/pages/Home/HomePage'
 import StandupChatDialog from '@/components/pages/Home/StandupChatDialog'
 import StandupConfirmDialog from '@/components/pages/Home/StandupConfirmDialog'
+import YearCalendar from '@/components/pages/Home/YearCalendar'
 import { useDailyStandup } from '@/components/pages/Home/useDailyStandup'
 import { standupContent } from '@/data/standup'
 import { fetchSession, sessionQueryKey, signOut } from '@/lib/api/auth'
@@ -61,8 +62,7 @@ export default function HomeRoute() {
       onDraftChange={daily.setDraft}
       onLaunch={daily.launch}
       isLaunchDisabled={daily.isLaunchDisabled}
-      calendarCount={daily.calendarCount}
-      calendarWeeks={daily.calendarWeeks}
+      calendar={<YearCalendar status="loading" />}
       dialogs={
         <>
           <StandupChatDialog {...daily.chat}>
