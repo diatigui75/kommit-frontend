@@ -1,3 +1,4 @@
+import { standupContent } from '@/data/standup'
 import type { ApiError } from '@/types/apiContract'
 
 export type StandupErrorDisplay = {
@@ -18,6 +19,11 @@ export type SummaryLoadErrorReaction = {
   shouldRefreshCalendar: boolean
 }
 
-export function summaryLoadErrorFor(_error: ApiError): SummaryLoadErrorReaction {
-  return { message: '', shouldCloseDialog: false, shouldRefreshCalendar: false }
+// Un standup disparu ne laisse jamais de modale vide : on l'annonce et le calendrier se recharge (CA45).
+export function summaryLoadErrorFor(error: ApiError): SummaryLoadErrorReaction {
+  if (error.code === 'STANDUP_NOT_FOUND') {
+    return { message: standupContent.summaryDialog.notFoundMessage, shouldCloseDialog: true, shouldRefreshCalendar: true }
+  }
+
+  return { message: error.message, shouldCloseDialog: true, shouldRefreshCalendar: false }
 }

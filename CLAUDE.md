@@ -30,7 +30,7 @@ kommit-frontend/
 │   └── workflow-ticket-frontend.md # workflow d'un ticket, de la maquette à la PR
 ├── public/
 │   └── favicon.svg
-├── e2e/                   # parcours Playwright, un fichier par thème : KOM-07 (SM-1 à SM-20), QA (qa-*), correctifs du QA de F1-US1 (unknownUrl, authPagesWhenConnected, longFirstName, doubleSubmit), KOM-19 (standup*, .nondet = vrai LLM)
+├── e2e/                   # parcours Playwright, un fichier par thème : KOM-07 (SM-1 à SM-20), QA (qa-*), correctifs du QA de F1-US1 (unknownUrl, authPagesWhenConnected, longFirstName, doubleSubmit), KOM-19 (standup*, .nondet = vrai LLM), KOM-22 (standupCalendar)
 │   └── support/
 │       ├── auth.ts        # helpers : email unique, compte et session par l'API, requêtes bloquées
 │       └── standup.ts     # helpers du daily : standup du jour par l'API, tours du LLM, flux SSE simulé
@@ -42,6 +42,8 @@ kommit-frontend/
 │   ├── smokes-KOM-07.md     # scénarios de smoke de KOM-07
 │   ├── inventaire-KOM-19.md # classement des CA de KOM-19 par type de test
 │   ├── smokes-KOM-19.md     # scénarios de smoke de KOM-19
+│   ├── inventaire-KOM-22.md # classement des CA de KOM-22 par type de test
+│   ├── smokes-KOM-22.md     # scénarios de smoke de KOM-22
 │   └── qa/                  # rapports de /run-qa, un dossier par run (rapport, couverture, captures)
 ├── src/
 │   ├── main.tsx           # point d'entrée, monte l'app dans le DOM
@@ -68,12 +70,14 @@ kommit-frontend/
 │   │       │   ├── PageHeading.tsx    # titre avec partie en bleu et sous-titre
 │   │       │   ├── DailyInputCard.tsx # zone de saisie du daily et « Lancer le daily »
 │   │       │   ├── TipNote.tsx        # note « Astuce » de la carte de saisie
-│   │       │   ├── YearCalendar.tsx   # compteur, grille 53 × 7 et légende
+│   │       │   ├── YearCalendar.tsx   # calendrier : chargement, erreur, grille du dimanche au samedi, carrés verts cliquables
+│   │       │   ├── StandupSummaryDialog.tsx # résumé d'un jour en lecture seule
 │   │       │   ├── StandupChatDialog.tsx # modale de conversation en streaming
 │   │       │   ├── ChatMessage.tsx    # bulle utilisateur ou assistant
 │   │       │   ├── SummaryBlock.tsx   # récap Hier / Blocages / À venir
 │   │       │   ├── StandupConfirmDialog.tsx # confirmations quitter (CA7) et remplacer (CA9)
-│   │       │   └── useDailyStandup.ts # câblage du daily : état du jour, SSE, validation
+│   │       │   ├── useDailyStandup.ts # câblage du daily : état du jour, SSE, validation
+│   │       │   └── useStandupCalendar.ts # câblage du calendrier : fenêtre de 53 semaines, résumé d'un jour
 │   │       ├── Signin/
 │   │       │   ├── SigninPage.tsx     # formulaire de connexion
 │   │       │   └── SigninRoute.tsx    # saisie, appel signin et erreurs
@@ -99,9 +103,9 @@ kommit-frontend/
 │   │   │   └── validation/   # critères du signup et visibilité des erreurs (RM10, RM11, RM20, RM30)
 │   │   └── standup/       # logique pure de KOM-19, chaque unité avec son .test.ts
 │   │       ├── buttons/      # envoi et Valider activés ou non (CA27, CA39, CA40, CA25, CA32)
-│   │       ├── calendar/     # carré du jour dans la grille, jour lu en Europe/Paris
+│   │       ├── calendar/     # grille de 53 semaines en Europe/Paris, bornes, vue chargement / erreur (CA11, CA12, CA13, CA37, CA43)
 │   │       ├── conversation/ # historique, corps envoyé, conversation inachevée (CA2, CA7, CA44)
-│   │       ├── error/        # erreur du flux → message, panne ou métier (CA29, CA31, CA32)
+│   │       ├── error/        # erreur du flux (CA29, CA31, CA32), standup disparu (CA45)
 │   │       ├── sse/          # lecture du flux SSE et indicateur d'attente (CA4, CA34)
 │   │       ├── summary/      # blocs du récap, « Aucun », corps de validation (CA5, CA10, CA26)
 │   │       └── today/        # titre de l'accueil et carré du jour (CA1, CA8, CA9, CA25, CA42)
@@ -110,7 +114,7 @@ kommit-frontend/
 │   │   │   ├── apiClient.ts # URL du backend, cookie de session, JSON et erreurs
 │   │   │   ├── auth.ts      # appels Better Auth (session, signup, signin, signout)
 │   │   │   ├── health.ts    # appels à /health et /db-health
-│   │   │   └── standup.ts   # standup du jour, validation, flux SSE de la conversation
+│   │   │   └── standup.ts   # standup du jour, calendrier, résumé d'un jour, validation, flux SSE
 │   │   ├── queryClient.ts # client TanStack Query
 │   │   └── utils.ts       # helper cn() de shadcn
 │   └── types/

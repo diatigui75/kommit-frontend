@@ -5,7 +5,9 @@ import { toast } from 'sonner'
 import HomePage from '@/components/pages/Home/HomePage'
 import StandupChatDialog from '@/components/pages/Home/StandupChatDialog'
 import StandupConfirmDialog from '@/components/pages/Home/StandupConfirmDialog'
+import StandupSummaryDialog from '@/components/pages/Home/StandupSummaryDialog'
 import YearCalendar from '@/components/pages/Home/YearCalendar'
+import { useStandupCalendar } from '@/components/pages/Home/useStandupCalendar'
 import { useDailyStandup } from '@/components/pages/Home/useDailyStandup'
 import { standupContent } from '@/data/standup'
 import { fetchSession, sessionQueryKey, signOut } from '@/lib/api/auth'
@@ -49,6 +51,7 @@ export default function HomeRoute() {
 
   const firstName = isVisitor(session) ? undefined : session?.user.name
   const daily = useDailyStandup(firstName !== undefined)
+  const calendar = useStandupCalendar(firstName !== undefined)
   const heading = homeHeadingFor(daily.today, firstName ?? '')
 
   return (
@@ -62,7 +65,7 @@ export default function HomeRoute() {
       onDraftChange={daily.setDraft}
       onLaunch={daily.launch}
       isLaunchDisabled={daily.isLaunchDisabled}
-      calendar={<YearCalendar status="loading" />}
+      calendar={<YearCalendar view={calendar.view} onSelectDay={calendar.onSelectDay} />}
       dialogs={
         <>
           <StandupChatDialog {...daily.chat}>
@@ -81,6 +84,7 @@ export default function HomeRoute() {
             cancelLabel={standupContent.replace.cancelLabel}
             confirmLabel={standupContent.replace.confirmLabel}
           />
+          <StandupSummaryDialog {...calendar.summaryDialog} />
         </>
       }
     />
