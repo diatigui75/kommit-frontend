@@ -1,9 +1,10 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useRef, useState } from 'react'
+import { Navigate, useNavigate } from 'react-router'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import SignupPage from '@/components/pages/Signup/SignupPage'
 import { fetchSession, sessionQueryKey, signUp } from '@/lib/api/auth'
 import { authErrorDisplayFor, type AuthErrorDisplay } from '@/logic/auth/error/error'
+import { shouldLeaveAuthPage } from '@/logic/auth/session/session'
 import { signupBodyFor } from '@/logic/auth/signupBody/signupBody'
 import { isSignupSubmitDisabled } from '@/logic/auth/submitButton/submitButton'
 import { invalidSignupFields, type SignupValues, visibleSignupFieldErrors } from '@/logic/auth/validation/validation'
@@ -15,6 +16,9 @@ export default function SignupRoute() {
   const [values, setValues] = useState<SignupValues>({ firstName: '', email: '', password: '' })
   const [hasBeenSubmitted, setHasBeenSubmitted] = useState(false)
   const [serverError, setServerError] = useState<AuthErrorDisplay | null>(null)
+  // Garde synchrone : isPending n'est à jour qu'au rendu suivant, 2 soumissions dans le même instant le liraient à false.
+  const isSubmittingRef = useRef(false)
+  const sessionQuery = useQuery({ queryKey: sessionQueryKey, queryFn: fetchSession, retry: false })
 
   const signupMutation = useMutation({
     mutationFn: signUp,
@@ -24,17 +28,25 @@ export default function SignupRoute() {
       await queryClient.fetchQuery({ queryKey: sessionQueryKey, queryFn: fetchSession }).catch(() => undefined)
       navigate('/', { state: { arrivalOrigin: 'signup' } })
     },
-    onError: (error) => setServerError(authErrorDisplayFor(error)),
+    onError: (error) => {
+      isSubmittingRef.current = false
+      setServerError(authErrorDisplayFor(error))
+    },
   })
 
   const handleSubmit = () => {
-    if (signupMutation.isPending) return
+    if (isSubmittingRef.current) return
 
     setHasBeenSubmitted(true)
     setServerError(null)
     if (invalidSignupFields(values).length > 0) return
 
+    isSubmittingRef.current = true
     signupMutation.mutate(signupBodyFor(values))
+  }
+
+  if (shouldLeaveAuthPage(sessionQuery.data, signupMutation.isPending || signupMutation.isSuccess)) {
+    return <Navigate to="/" replace />
   }
 
   const fieldErrors = visibleSignupFieldErrors(values, hasBeenSubmitted)

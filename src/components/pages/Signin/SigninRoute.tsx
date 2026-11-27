@@ -1,10 +1,11 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useRef, useState } from 'react'
+import { Navigate, useNavigate } from 'react-router'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import SigninPage from '@/components/pages/Signin/SigninPage'
 import { fetchSession, sessionQueryKey, signIn } from '@/lib/api/auth'
 import { normalizeEmail } from '@/logic/auth/email/email'
 import { authErrorDisplayFor } from '@/logic/auth/error/error'
+import { shouldLeaveAuthPage } from '@/logic/auth/session/session'
 import { isSigninSubmitDisabled } from '@/logic/auth/submitButton/submitButton'
 
 // Câble le signin : aucun contrôle de format (RM20), appel serveur, erreur en message global (RM13, RM18).
@@ -13,6 +14,9 @@ export default function SigninRoute() {
   const queryClient = useQueryClient()
   const [values, setValues] = useState({ email: '', password: '' })
   const [formError, setFormError] = useState<string | undefined>(undefined)
+  // Garde synchrone : isPending n'est à jour qu'au rendu suivant, 2 soumissions dans le même instant le liraient à false.
+  const isSubmittingRef = useRef(false)
+  const sessionQuery = useQuery({ queryKey: sessionQueryKey, queryFn: fetchSession, retry: false })
 
   const signinMutation = useMutation({
     mutationFn: signIn,
@@ -22,14 +26,22 @@ export default function SigninRoute() {
       await queryClient.fetchQuery({ queryKey: sessionQueryKey, queryFn: fetchSession }).catch(() => undefined)
       navigate('/', { state: { arrivalOrigin: 'signin' } })
     },
-    onError: (error) => setFormError(authErrorDisplayFor(error).message),
+    onError: (error) => {
+      isSubmittingRef.current = false
+      setFormError(authErrorDisplayFor(error).message)
+    },
   })
 
   const handleSubmit = () => {
-    if (signinMutation.isPending) return
+    if (isSubmittingRef.current) return
 
+    isSubmittingRef.current = true
     setFormError(undefined)
     signinMutation.mutate({ email: normalizeEmail(values.email), password: values.password })
+  }
+
+  if (shouldLeaveAuthPage(sessionQuery.data, signinMutation.isPending || signinMutation.isSuccess)) {
+    return <Navigate to="/" replace />
   }
 
   return (

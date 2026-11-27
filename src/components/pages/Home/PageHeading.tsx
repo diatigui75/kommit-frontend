@@ -8,7 +8,7 @@ type PageHeadingProps = {
 export default function PageHeading({ title, titleAccent, subtitle }: PageHeadingProps) {
   return (
     <div className="flex flex-col items-center gap-3 py-7 text-center">
-      <h1 className="text-3xl leading-tight font-bold text-foreground md:text-5xl md:leading-[57.6px]">
+      <h1 className="w-full text-3xl leading-tight font-bold wrap-anywhere text-foreground md:text-5xl md:leading-[57.6px]">
         {title}
         <span className="text-blue-accent">{titleAccent}</span>
       </h1>
