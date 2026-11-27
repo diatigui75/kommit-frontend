@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { BotIcon, LoaderCircleIcon, SendIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import ChatMessage from '@/components/pages/Home/ChatMessage'
 import SummaryBlock from '@/components/pages/Home/SummaryBlock'
 import { standupContent } from '@/data/standup'
+import { isSendDisabled } from '@/logic/standup/buttons/buttons'
+import { isWaitingIndicatorVisible } from '@/logic/standup/sse/sse'
 import type { Message, StandupSummary } from '@/types/apiContract'
 
 type StandupChatDialogProps = {
@@ -14,11 +16,12 @@ type StandupChatDialogProps = {
   isStreaming: boolean
   summary: StandupSummary | null
   errorMessage: string | null
-  isValidating: boolean
+  isValidateDisabled: boolean
   onRequestClose: () => void
   onSend: (text: string) => void
   onValidate: () => void
   onRetry: () => void
+  children?: ReactNode
 }
 
 const { chat } = standupContent
@@ -31,17 +34,18 @@ export default function StandupChatDialog({
   isStreaming,
   summary,
   errorMessage,
-  isValidating,
+  isValidateDisabled,
   onRequestClose,
   onSend,
   onValidate,
   onRetry,
+  children,
 }: StandupChatDialogProps) {
   const [draft, setDraft] = useState('')
-  const isSendDisabled = isStreaming || draft.trim() === ''
+  const isDraftSendDisabled = isSendDisabled({ text: draft, isStreaming })
 
   const send = () => {
-    if (isSendDisabled) return
+    if (isDraftSendDisabled) return
     onSend(draft)
     setDraft('')
   }
@@ -68,7 +72,7 @@ export default function StandupChatDialog({
               {message.content}
             </ChatMessage>
           ))}
-          {isStreaming && streamingText === '' && (
+          {isWaitingIndicatorVisible({ isStreaming, receivedText: streamingText }) && (
             <ChatMessage role="assistant">
               <span className="flex items-center gap-2 text-grey-text">
                 <LoaderCircleIcon className="size-4 animate-spin" aria-hidden />
@@ -82,7 +86,7 @@ export default function StandupChatDialog({
               <p>{chat.summaryIntro}</p>
               <SummaryBlock summary={summary} />
               <div className="flex flex-wrap gap-2">
-                <Button variant="chip" onClick={onValidate} disabled={isValidating}>
+                <Button variant="chip" onClick={onValidate} disabled={isValidateDisabled}>
                   {chat.validateLabel}
                 </Button>
                 <Button variant="chip" onClick={() => document.getElementById('standup-message')?.focus()}>
@@ -120,13 +124,14 @@ export default function StandupChatDialog({
             <button
               type="submit"
               aria-label={chat.sendLabel}
-              disabled={isSendDisabled}
+              disabled={isDraftSendDisabled}
               className="cursor-pointer text-primary disabled:cursor-not-allowed disabled:opacity-40"
             >
               <SendIcon className="size-5" aria-hidden />
             </button>
           </div>
         </form>
+        {children}
       </DialogContent>
     </Dialog>
   )

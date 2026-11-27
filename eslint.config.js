@@ -6,7 +6,8 @@ import tseslint from 'typescript-eslint'
 import { globalIgnores } from 'eslint/config'
 
 export default tseslint.config([
-  globalIgnores(['dist']),
+  // Les sorties de Playwright changent pendant un run e2e : ESLint plante s'il les parcourt au même moment.
+  globalIgnores(['dist', 'test-results', 'playwright-report']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

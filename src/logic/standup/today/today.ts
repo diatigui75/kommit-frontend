@@ -1,3 +1,5 @@
+import { standupContent } from '@/data/standup'
+import { composeGreeting } from '@/logic/auth/session/session'
 import type { GetTodayResponse } from '@/types/apiContract'
 
 export type HomeHeading =
@@ -11,14 +13,21 @@ export type TodaySquareState = {
   isConversationOpen: boolean
 }
 
-export function hasTodayStandup(_today: GetTodayResponse): boolean {
-  return false
+export function hasTodayStandup(today: GetTodayResponse): boolean {
+  return today.done
 }
 
-export function homeHeadingFor(_today: GetTodayResponse | undefined, _name: string): HomeHeading {
-  return { status: 'loading' }
+// Tant que l'état du jour n'est pas connu, aucun titre : l'un ne doit jamais basculer en l'autre (CA42).
+export function homeHeadingFor(today: GetTodayResponse | undefined, name: string): HomeHeading {
+  if (today === undefined) return { status: 'loading' }
+  if (hasTodayStandup(today)) return { status: 'done', title: standupContent.home.alreadyDoneTitle }
+
+  return { status: 'toDo', ...composeGreeting(name) }
 }
 
-export function isTodaySquareFilled(_state: TodaySquareState): boolean {
-  return false
+// Un standup enregistré pendant la conversation ne colore le carré qu'une fois la modale fermée (CA25).
+export function isTodaySquareFilled(state: TodaySquareState): boolean {
+  if (state.wasDoneBeforeOpening) return true
+
+  return state.isSavedDuringConversation && !state.isConversationOpen
 }

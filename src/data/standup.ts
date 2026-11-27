@@ -1,7 +1,7 @@
 // Textes du daily standup (maquette F2, ticket KOM-19). Le ticket prime quand il diffère de la maquette.
 export const standupContent = {
   home: {
-    alreadyDoneTitle: 'Bravo, tu as renseigné ton standup du jour !',
+    alreadyDoneTitle: 'Bravo, tu as renseigné ton standup du jour !',
     alreadyDoneSubtitle: "En renseignant ton daily du jour à nouveau, il remplacera l'existant.",
   },
   input: {

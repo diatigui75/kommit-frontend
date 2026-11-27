@@ -5,6 +5,9 @@ export type StandupErrorDisplay = {
   message: string
 }
 
-export function standupErrorDisplayFor(_error: ApiError): StandupErrorDisplay {
-  return { kind: 'business', message: '' }
+const OUTAGE_CODES: ApiError['code'][] = ['LLM_QUOTA_EXCEEDED', 'LLM_UNAVAILABLE', 'INTERNAL_ERROR']
+
+// Les pannes de l'IA et du serveur sont distinctes des erreurs métier (CA31, CA32) ; le message du serveur s'affiche tel quel.
+export function standupErrorDisplayFor(error: ApiError): StandupErrorDisplay {
+  return { kind: OUTAGE_CODES.includes(error.code) ? 'outage' : 'business', message: error.message }
 }
