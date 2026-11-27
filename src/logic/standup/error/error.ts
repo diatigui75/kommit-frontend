@@ -11,3 +11,13 @@ const OUTAGE_CODES: ApiError['code'][] = ['LLM_QUOTA_EXCEEDED', 'LLM_UNAVAILABLE
 export function standupErrorDisplayFor(error: ApiError): StandupErrorDisplay {
   return { kind: OUTAGE_CODES.includes(error.code) ? 'outage' : 'business', message: error.message }
 }
+
+export type SummaryLoadErrorReaction = {
+  message: string
+  shouldCloseDialog: boolean
+  shouldRefreshCalendar: boolean
+}
+
+export function summaryLoadErrorFor(_error: ApiError): SummaryLoadErrorReaction {
+  return { message: '', shouldCloseDialog: false, shouldRefreshCalendar: false }
+}
