@@ -27,7 +27,7 @@ kommit-frontend/
 │   └── TECH.md            # stack technique
 ├── public/
 │   └── favicon.svg
-├── e2e/                   # parcours Playwright de KOM-07, un fichier par thème (SM-1 à SM-20)
+├── e2e/                   # parcours Playwright, un fichier par thème : KOM-07 (SM-1 à SM-20), QA (qa-*), correctifs du QA de F1-US1 (unknownUrl, authPagesWhenConnected, longFirstName, doubleSubmit)
 │   └── support/
 │       └── auth.ts        # helpers : email unique, compte et session par l'API, requêtes bloquées
 ├── maquettes/
@@ -39,7 +39,7 @@ kommit-frontend/
 │   └── qa/                  # rapports de /run-qa, un dossier par run (rapport, couverture, captures)
 ├── src/
 │   ├── main.tsx           # point d'entrée, monte l'app dans le DOM
-│   ├── App.tsx            # providers, routes (/, /signup, /signin, /health) et Toaster
+│   ├── App.tsx            # providers, routes (/, /signup, /signin, /health, URL inconnue → /) et Toaster
 │   ├── index.css          # Tailwind, thème shadcn et tokens de la maquette
 │   ├── assets/
 │   │   └── F1/
@@ -78,7 +78,7 @@ kommit-frontend/
 │   │       ├── arrivalToast/ # message du toast selon l'origine (RM3, RM4, RM24, RM25)
 │   │       ├── email/        # normalisation de l'email (RM21)
 │   │       ├── error/        # ApiError ou échec réseau → message et emplacement (RM9, RM13, RM18)
-│   │       ├── session/      # état visiteur et titre de l'accueil (RM1, RM2)
+│   │       ├── session/      # état visiteur, titre de l'accueil (RM1, RM2), sortie de /signin et /signup si connecté
 │   │       ├── signupBody/   # corps envoyé au signup : prénom trimé, email normalisé
 │   │       ├── submitButton/ # bouton de soumission activé ou non (RM17, RM19, RM32, RM33)
 │   │       └── validation/   # critères du signup et visibilité des erreurs (RM10, RM11, RM20, RM30)
