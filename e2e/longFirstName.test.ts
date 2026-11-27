@@ -22,7 +22,7 @@ for (const width of [1280, 375]) {
     await page.goto('/')
 
     await expectAfterBackend(connectedHeading(page, LONG_FIRST_NAME)).toBeVisible()
-    const pageWidth = await page.evaluate(() => document.documentElement.scrollWidth)
+    const pageWidth = await page.locator('html').evaluate((html) => html.scrollWidth)
     expect(pageWidth).toBeLessThanOrEqual(width)
   })
 }
