@@ -48,7 +48,10 @@ function check() {
 }
 
 function start() {
-  const protectedFiles = execSync('git ls-files e2e', { encoding: 'utf8' }).split('\n').filter(Boolean)
+  // --others : un e2e pas encore commité (écrit par un run précédent) est protégé lui aussi.
+  const protectedFiles = execSync('git ls-files --cached --others --exclude-standard e2e', { encoding: 'utf8' })
+    .split('\n')
+    .filter(Boolean)
   const session = { startedAt: new Date().toISOString(), protectedFiles }
   writeFileSync(SESSION_FILE, JSON.stringify(session, null, 2))
   console.log(JSON.stringify({ startedAt: session.startedAt, protectedFiles: protectedFiles.length }))
