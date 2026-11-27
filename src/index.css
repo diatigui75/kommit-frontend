@@ -19,6 +19,14 @@
     --color-success-bg: #e0faeb;
     --shadow-card: 0 12px 16px rgba(20, 28, 37, 0.04);
     --shadow-button: 0 1px 1px rgba(0, 0, 0, 0.05);
+    --color-field-border: #dae3ef;
+    --color-danger: #ca3725;
+    /* F2 : valeurs estimées depuis les captures (« ~ » dans maquettes/F2/code-brut), à confirmer dans Figma */
+    --color-bubble: #edf3fc;
+    --color-day-empty: #eef1f6;
+    --color-tip-bg: #eef4fd;
+    --color-tip-border: #c9dbf4;
+    --color-overlay: rgba(20, 28, 37, 0.4);
 }
 
 @theme inline {
