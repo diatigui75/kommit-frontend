@@ -77,7 +77,7 @@ Lancer l'agent `qa-explorer` avec :
 - les zones de l'app, tirées de `couverture.md` (ex. accueil, inscription, connexion, déconnexion), avec 1 ligne de résumé de leurs règles ;
 - l'heure limite : `startedAt` + 18 minutes, pour garder 2 minutes au rapport.
 
-Puis déplacer ses captures, qui peuvent arriver dans `testing/qa/` ou dans `testing/qa/.mcp-output/` : `find testing/qa -maxdepth 2 -name '<run-id>-P2-*.png' -not -path '*/captures/*' -exec mv {} testing/qa/<run-id>/captures/ \;`.
+Puis déplacer ses captures, qui peuvent arriver à la racine du repo, dans `testing/qa/` ou dans `testing/qa/.mcp-output/` : `find . testing/qa -maxdepth 2 -name '<run-id>-P2-*.png' -not -path '*/captures/*' -not -path './node_modules/*' -exec mv {} testing/qa/<run-id>/captures/ \;`.
 
 Si le MCP `playwright` n'est pas disponible dans la session, ne pas improviser : noter la passe 2 comme non faite dans le rapport, avec la raison.
 
