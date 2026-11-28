@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { BotIcon, LoaderCircleIcon, SendIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
@@ -42,6 +42,13 @@ export default function StandupChatDialog({
   children,
 }: StandupChatDialogProps) {
   const [draft, setDraft] = useState('')
+  const threadRef = useRef<HTMLDivElement>(null)
+
+  // Le fil descend jusqu'au dernier message à chaque nouveauté (P2-10 du QA).
+  useEffect(() => {
+    const thread = threadRef.current
+    if (thread) thread.scrollTop = thread.scrollHeight
+  }, [messages.length, streamingText, summary, errorMessage, isStreaming])
   const isDraftSendDisabled = isSendDisabled({ text: draft, isStreaming })
 
   const send = () => {
@@ -66,7 +73,7 @@ export default function StandupChatDialog({
           </div>
         </header>
 
-        <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-6 py-6" aria-live="polite">
+        <div ref={threadRef} className="flex flex-1 flex-col gap-4 overflow-y-auto px-6 py-6" aria-live="polite">
           {messages.map((message, index) => (
             <ChatMessage key={index} role={message.role}>
               {message.content}

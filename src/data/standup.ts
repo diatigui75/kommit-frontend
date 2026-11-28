@@ -43,6 +43,7 @@ export const standupContent = {
     validateLabel: 'Oui, je valide le daily',
     addInfoLabel: "Non, j'aimerais ajouter une info.",
     retryLabel: 'Réessayer',
+    sessionExpiredMessage: 'Ta session a expiré. Reconnecte-toi pour renseigner ton daily.',
   },
   summary: {
     fait: 'Hier',

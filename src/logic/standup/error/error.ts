@@ -27,3 +27,8 @@ export function summaryLoadErrorFor(error: ApiError): SummaryLoadErrorReaction {
 
   return { message: error.message, shouldCloseDialog: true, shouldRefreshCalendar: false }
 }
+
+// Le backend répond 401 sans corps quand la session a expiré : ce n'est pas une panne du serveur.
+export function isSessionExpired(error: unknown): boolean {
+  return error !== null && typeof error === 'object' && 'status' in error && error.status === 401
+}

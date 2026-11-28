@@ -24,7 +24,8 @@ export async function* postTextStream(path: string, body: unknown, signal?: Abor
     body: JSON.stringify(body),
     signal,
   })
-  if (!response.ok || !response.body) throw await response.json().catch(() => null)
+  // Sans corps (ex. 401 d'une session expirée), le statut HTTP reste lisible par l'appelant.
+  if (!response.ok || !response.body) throw (await response.json().catch(() => null)) ?? { status: response.status }
 
   const reader = response.body.pipeThrough(new TextDecoderStream()).getReader()
   try {
@@ -49,7 +50,7 @@ export const requestJson = async <T>(path: string, method: 'GET' | 'POST', body?
   })
   const payload: unknown = await response.json().catch(() => null)
 
-  if (!response.ok) throw payload
+  if (!response.ok) throw payload ?? { status: response.status }
 
   return payload as T
 }

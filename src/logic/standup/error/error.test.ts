@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { standupErrorDisplayFor } from '@/logic/standup/error/error'
-import { summaryLoadErrorFor } from '@/logic/standup/error/error'
+import { isSessionExpired, summaryLoadErrorFor } from '@/logic/standup/error/error'
 import { standupContent } from '@/data/standup'
 import type { ApiError } from '@/types/apiContract'
 
@@ -81,5 +81,31 @@ describe('summaryLoadErrorFor — CA45 standup disparu au clic sur un carré ver
     const notFoundMessage = summaryLoadErrorFor(standupGone).message
 
     expect(notFoundMessage).toBe(standupContent.summaryDialog.notFoundMessage)
+  })
+})
+
+describe('isSessionExpired — session expirée pendant le daily (QA F2-US1, P2-08)', () => {
+  it('reconnaît le 401 sans corps renvoyé par le backend', () => {
+    const unauthorizedWithoutBody = { status: 401 }
+
+    expect(isSessionExpired(unauthorizedWithoutBody)).toBe(true)
+  })
+
+  it('ne prend pas une panne réseau pour une session expirée', () => {
+    const networkFailure = new Error('Le serveur ne répond pas.')
+
+    expect(isSessionExpired(networkFailure)).toBe(false)
+  })
+
+  it('ne prend pas une erreur du contrat pour une session expirée', () => {
+    const quotaExceeded: ApiError = { code: 'LLM_QUOTA_EXCEEDED', message: 'Le quota de l’assistant est atteint' }
+
+    expect(isSessionExpired(quotaExceeded)).toBe(false)
+  })
+
+  it('ne prend pas une erreur 500 sans corps pour une session expirée', () => {
+    const serverErrorWithoutBody = { status: 500 }
+
+    expect(isSessionExpired(serverErrorWithoutBody)).toBe(false)
   })
 })
