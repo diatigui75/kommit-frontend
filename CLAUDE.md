@@ -30,7 +30,7 @@ kommit-frontend/
 │   └── workflow-ticket-frontend.md # workflow d'un ticket, de la maquette à la PR
 ├── public/
 │   └── favicon.svg
-├── e2e/                   # parcours Playwright, un fichier par thème : KOM-07 (SM-1 à SM-20), QA (qa-*), correctifs du QA de F1-US1 (unknownUrl, authPagesWhenConnected, longFirstName, doubleSubmit), KOM-19 (standup*, .nondet = vrai LLM), KOM-22 (standupCalendar)
+├── e2e/                   # parcours Playwright, un fichier par thème : KOM-07 (SM-1 à SM-20), QA (qa-*), correctifs du QA de F1-US1 (unknownUrl, authPagesWhenConnected, longFirstName, doubleSubmit), KOM-19 (standup*, .nondet = vrai LLM), KOM-22 (standupCalendar), correctifs du QA de F2-US1 (standupQaFixes)
 │   └── support/
 │       ├── auth.ts        # helpers : email unique, compte et session par l'API, requêtes bloquées
 │       └── standup.ts     # helpers du daily : standup du jour par l'API, tours du LLM, flux SSE simulé

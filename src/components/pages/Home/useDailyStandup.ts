@@ -1,5 +1,8 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import { sessionQueryKey } from '@/lib/api/auth'
+import { standupContent } from '@/data/standup'
 import { saveStandup, standupsQueryKey, streamConversation, todayStandupQueryKey, fetchTodayStandup } from '@/lib/api/standup'
 import { authContent } from '@/data/auth'
 import { isSendDisabled, isValidateDisabled } from '@/logic/standup/buttons/buttons'
@@ -9,7 +12,7 @@ import {
   conversationBodyFor,
   isConversationUnfinished,
 } from '@/logic/standup/conversation/conversation'
-import { standupErrorDisplayFor } from '@/logic/standup/error/error'
+import { isSessionExpired, standupErrorDisplayFor } from '@/logic/standup/error/error'
 import { appendTokens, readSseChunk } from '@/logic/standup/sse/sse'
 import { standupBodyFor } from '@/logic/standup/summary/summary'
 import { hasTodayStandup } from '@/logic/standup/today/today'
@@ -43,6 +46,13 @@ export function useDailyStandup(isConnected: boolean) {
 
   // Une ApiError du contrat garde son message ; un échec réseau prend le texte de panne de F1.
   const showError = (error: unknown) => {
+    // Session expirée (P2-08 du QA) : on le dit, on ferme la conversation et l'accueil repasse en visiteur.
+    if (isSessionExpired(error)) {
+      toast.error(standupContent.chat.sessionExpiredMessage)
+      resetChat()
+      queryClient.setQueryData(sessionQueryKey, null)
+      return
+    }
     if (error !== null && typeof error === 'object' && 'code' in error) setStreamError(error as ApiError)
     else setNetworkError(authContent.outageMessage)
   }
@@ -93,6 +103,35 @@ export function useDailyStandup(isConnected: boolean) {
     setStreamError(null)
     setNetworkError(null)
   }
+
+  // Bouton retour pendant la conversation (P2-12 du QA) : une entrée d'historique en plus le fait passer par la confirmation.
+  const hasHistoryGuardRef = useRef(false)
+  useEffect(() => {
+    if (isChatOpen && !hasHistoryGuardRef.current) {
+      window.history.pushState({ standupChat: true }, '')
+      hasHistoryGuardRef.current = true
+    }
+    if (!isChatOpen && hasHistoryGuardRef.current) {
+      hasHistoryGuardRef.current = false
+      if (window.history.state?.standupChat) window.history.back()
+    }
+  }, [isChatOpen])
+
+  useEffect(() => {
+    if (!isChatOpen) return
+    const onBack = () => {
+      hasHistoryGuardRef.current = false
+      if (isConversationUnfinished(messages, isSaved)) {
+        window.history.pushState({ standupChat: true }, '')
+        hasHistoryGuardRef.current = true
+        setIsQuitConfirmOpen(true)
+      } else {
+        resetChat()
+      }
+    }
+    window.addEventListener('popstate', onBack)
+    return () => window.removeEventListener('popstate', onBack)
+  })
 
   const startConversation = (text: string) => {
     const history = addUserMessage([], text)

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { LoaderCircleIcon } from 'lucide-react'
 import { standupContent } from '@/data/standup'
 import type { CalendarView } from '@/logic/standup/calendar/calendar'
@@ -13,6 +14,14 @@ const FILLED = 'border border-success bg-success-bg'
 
 // Calendrier de l'année (maquette F2) : gris sans standup, liseré vert cliquable avec (CA12, CA14), futur vide (CA13).
 export default function YearCalendar({ view, onSelectDay }: YearCalendarProps) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  // Sur un écran étroit, la grille s'ouvre sur la semaine en cours, tout à droite (P2-09 du QA).
+  useEffect(() => {
+    const scroller = scrollRef.current
+    if (scroller) scroller.scrollLeft = scroller.scrollWidth
+  }, [view.status])
+
   return (
     <section className="flex w-full max-w-[880px] flex-col gap-4 rounded-lg border border-card-border bg-white p-6 shadow-card">
       {view.status === 'loading' && (
@@ -31,7 +40,7 @@ export default function YearCalendar({ view, onSelectDay }: YearCalendarProps) {
             {view.count}
             {calendar.countSuffix}
           </h2>
-          <div className="overflow-x-auto">
+          <div ref={scrollRef} className="overflow-x-auto">
             <div className="flex min-w-[640px] flex-col gap-1">
               <div className="relative h-4 text-[11px] leading-4 text-grey-text">
                 {view.months.map((month) => (
