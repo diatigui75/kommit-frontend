@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { standupErrorDisplayFor } from '@/logic/standup/error/error'
+import { summaryLoadErrorFor } from '@/logic/standup/error/error'
+import { standupContent } from '@/data/standup'
 import type { ApiError } from '@/types/apiContract'
 
 describe('standupErrorDisplayFor — CA31 provider indisponible, classé en panne', () => {
@@ -59,5 +61,25 @@ describe('standupErrorDisplayFor — CA29 erreur du flux, message du serveur', (
       kind: 'business',
       message: 'Le message ne peut pas être vide',
     })
+  })
+})
+
+describe('summaryLoadErrorFor — CA45 standup disparu au clic sur un carré vert', () => {
+  it('affiche le message du front, ferme la modale et rafraîchit le calendrier pour STANDUP_NOT_FOUND', () => {
+    const standupGone: ApiError = { code: 'STANDUP_NOT_FOUND', message: 'Aucun standup pour ce jour' }
+
+    expect(summaryLoadErrorFor(standupGone)).toEqual({
+      message: "Ce standup n'existe plus, le calendrier a été mis à jour.",
+      shouldCloseDialog: true,
+      shouldRefreshCalendar: true,
+    })
+  })
+
+  it('reprend le texte de summaryDialog.notFoundMessage, pas le message du serveur', () => {
+    const standupGone: ApiError = { code: 'STANDUP_NOT_FOUND', message: 'Aucun standup pour ce jour' }
+
+    const notFoundMessage = summaryLoadErrorFor(standupGone).message
+
+    expect(notFoundMessage).toBe(standupContent.summaryDialog.notFoundMessage)
   })
 })

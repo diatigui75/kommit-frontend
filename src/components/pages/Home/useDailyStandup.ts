@@ -1,9 +1,8 @@
 import { useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { saveStandup, streamConversation, todayStandupQueryKey, fetchTodayStandup } from '@/lib/api/standup'
+import { saveStandup, standupsQueryKey, streamConversation, todayStandupQueryKey, fetchTodayStandup } from '@/lib/api/standup'
 import { authContent } from '@/data/auth'
 import { isSendDisabled, isValidateDisabled } from '@/logic/standup/buttons/buttons'
-import { calendarWeeksFor, parisWeekdayIndex } from '@/logic/standup/calendar/calendar'
 import {
   addAssistantMessage,
   addUserMessage,
@@ -13,7 +12,7 @@ import {
 import { standupErrorDisplayFor } from '@/logic/standup/error/error'
 import { appendTokens, readSseChunk } from '@/logic/standup/sse/sse'
 import { standupBodyFor } from '@/logic/standup/summary/summary'
-import { hasTodayStandup, isTodaySquareFilled } from '@/logic/standup/today/today'
+import { hasTodayStandup } from '@/logic/standup/today/today'
 import type { ApiError, Message, StandupSummary } from '@/types/apiContract'
 
 // Câble le daily de l'accueil connecté (KOM-19) : état du jour, conversation SSE, validation et confirmations.
@@ -36,7 +35,6 @@ export function useDailyStandup(isConnected: boolean) {
   const [streamError, setStreamError] = useState<ApiError | null>(null)
   const [networkError, setNetworkError] = useState<string | null>(null)
   const [isSaved, setIsSaved] = useState(false)
-  const [wasDoneBeforeOpening, setWasDoneBeforeOpening] = useState(false)
   const [isQuitConfirmOpen, setIsQuitConfirmOpen] = useState(false)
   const [isReplaceConfirmOpen, setIsReplaceConfirmOpen] = useState(false)
   const abortRef = useRef<AbortController | null>(null)
@@ -98,7 +96,6 @@ export function useDailyStandup(isConnected: boolean) {
 
   const startConversation = (text: string) => {
     const history = addUserMessage([], text)
-    setWasDoneBeforeOpening(today ? hasTodayStandup(today) : false)
     setIsSaved(false)
     setMessages(history)
     setDraft('')
@@ -112,7 +109,8 @@ export function useDailyStandup(isConnected: boolean) {
     onSuccess: async () => {
       setIsSaved(true)
       resetChat()
-      await queryClient.invalidateQueries({ queryKey: todayStandupQueryKey })
+      // Le calendrier se recharge après la fermeture de la modale : le carré ne verdit qu'une fois fermée (CA25).
+      await queryClient.invalidateQueries({ queryKey: standupsQueryKey })
       isSavingRef.current = false
     },
     onError: (error) => {
@@ -123,11 +121,6 @@ export function useDailyStandup(isConnected: boolean) {
 
   const isLaunchDisabled = isSendDisabled({ text: draft, isStreaming: false })
   const errorMessage = streamError ? standupErrorDisplayFor(streamError).message : networkError
-  const isTodayFilled = isTodaySquareFilled({
-    wasDoneBeforeOpening: isChatOpen ? wasDoneBeforeOpening : today ? hasTodayStandup(today) : false,
-    isSavedDuringConversation: isSaved,
-    isConversationOpen: isChatOpen,
-  })
 
   return {
     today,
@@ -136,8 +129,6 @@ export function useDailyStandup(isConnected: boolean) {
     draft,
     setDraft,
     isLaunchDisabled,
-    calendarCount: isTodayFilled ? 1 : 0,
-    calendarWeeks: calendarWeeksFor(parisWeekdayIndex(new Date()), isTodayFilled),
     launch: () => {
       if (isLaunchDisabled) return
       // Un standup existe déjà : l'alerte prévient qu'il sera remplacé une fois le nouveau validé (CA9).

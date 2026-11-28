@@ -4,7 +4,6 @@ import { LoaderCircleIcon, LogOutIcon } from 'lucide-react'
 import { Button, buttonVariants } from '@/components/ui/button'
 import DailyInputCard from '@/components/pages/Home/DailyInputCard'
 import PageHeading from '@/components/pages/Home/PageHeading'
-import YearCalendar from '@/components/pages/Home/YearCalendar'
 import PageLayout from '@/components/ui/PageLayout'
 import { homeContent } from '@/data/home'
 import { layoutContent } from '@/data/layout'
@@ -23,8 +22,7 @@ type HomePageProps = {
   onDraftChange?: (value: string) => void
   onLaunch?: () => void
   isLaunchDisabled?: boolean
-  calendarCount?: number
-  calendarWeeks?: boolean[][]
+  calendar?: ReactNode
   dialogs?: ReactNode
 }
 
@@ -39,8 +37,7 @@ export default function HomePage({
   onDraftChange = () => undefined,
   onLaunch = () => undefined,
   isLaunchDisabled = true,
-  calendarCount = 0,
-  calendarWeeks = [],
+  calendar,
   dialogs,
 }: HomePageProps) {
   if (isSessionPending) return <PageLayout>{null}</PageLayout>
@@ -85,7 +82,7 @@ export default function HomePage({
             onLaunch={onLaunch}
             isLaunchDisabled={isLaunchDisabled}
           />
-          <YearCalendar count={calendarCount} weeks={calendarWeeks} />
+          {calendar}
         </div>
         {dialogs}
       </PageLayout>

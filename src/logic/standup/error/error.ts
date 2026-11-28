@@ -1,3 +1,4 @@
+import { standupContent } from '@/data/standup'
 import type { ApiError } from '@/types/apiContract'
 
 export type StandupErrorDisplay = {
@@ -10,4 +11,19 @@ const OUTAGE_CODES: ApiError['code'][] = ['LLM_QUOTA_EXCEEDED', 'LLM_UNAVAILABLE
 // Les pannes de l'IA et du serveur sont distinctes des erreurs métier (CA31, CA32) ; le message du serveur s'affiche tel quel.
 export function standupErrorDisplayFor(error: ApiError): StandupErrorDisplay {
   return { kind: OUTAGE_CODES.includes(error.code) ? 'outage' : 'business', message: error.message }
+}
+
+export type SummaryLoadErrorReaction = {
+  message: string
+  shouldCloseDialog: boolean
+  shouldRefreshCalendar: boolean
+}
+
+// Un standup disparu ne laisse jamais de modale vide : on l'annonce et le calendrier se recharge (CA45).
+export function summaryLoadErrorFor(error: ApiError): SummaryLoadErrorReaction {
+  if (error.code === 'STANDUP_NOT_FOUND') {
+    return { message: standupContent.summaryDialog.notFoundMessage, shouldCloseDialog: true, shouldRefreshCalendar: true }
+  }
+
+  return { message: error.message, shouldCloseDialog: true, shouldRefreshCalendar: false }
 }
