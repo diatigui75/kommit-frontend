@@ -20,7 +20,7 @@ kommit-frontend/
 │   └── skills/            # skills Claude Code
 ├── .github/
 │   └── workflows/
-│       └── ci.yml         # CI des PR vers dev : lint, build, tests unitaires
+│       └── ci.yml         # CI des PR vers dev et main : lint, build, tests unitaires
 ├── .vscode/
 │   └── settings.json
 ├── docs/
